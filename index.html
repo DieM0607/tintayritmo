@@ -29,6 +29,7 @@
   /* Artefactos: el color de cada obra vive solo en su luz */
   --luz-grimorio:#a3222d;
   --luz-proximo:#6d7279;
+  --luz-diem:#b8292e;
   --pergamino:#cfc3a3;
   --grafito:#3a3a3c;
   color-scheme:dark;
@@ -215,6 +216,15 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
 .aviso.ok{color:var(--tinta)}
 .trampa{position:absolute;left:-9999px}
 @media (max-width:860px){.contacto .rejilla,.par{grid-template-columns:minmax(0,1fr)}}
+/* ── Artistas ── */
+.vitrina .pieza.libre{text-decoration:none}
+.marco-vacio{width:170px;height:200px;border:1px dashed #3a3e45;border-radius:6px;display:grid;place-items:center;font:500 10.5px/1.5 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--plata-3);transition:border-color .5s,color .5s}
+.pieza:hover .marco-vacio{border-color:var(--plata-2);color:var(--tinta)}
+.pieza[data-a="diem"] .objeto img{max-height:150px;max-width:86%}
+.redes-f{display:flex;flex-wrap:wrap;gap:8px 18px}
+.redes-f a{color:var(--tinta-suave);text-decoration:none;font-size:14px;border-bottom:1px solid #2a2d33;padding-bottom:3px}
+.redes-f a:hover{color:var(--tinta);border-color:var(--plata-2)}
+.ficha-img .diem-img{max-height:200px}
 .pie{border-top:1px solid #15171b;padding-block:28px calc(28px + env(safe-area-inset-bottom,0px))}
 .pie .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:14px 28px;justify-content:space-between}
 .pie nav{display:flex;flex-wrap:wrap;gap:6px 22px}
@@ -243,7 +253,7 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
       <a class="marca" href="#inicio"><img src="logo.png" alt="">Tinta y Ritmo</a>
       <nav class="secciones" aria-label="Secciones">
         <a href="#artefactos" data-v="artefactos">Artefactos</a>
-        <a href="#" class="aun" title="Próximamente">Artistas</a>
+        <a href="#artistas" data-v="artistas">Artistas</a>
         <a href="#" class="aun" title="Próximamente">El Tintero</a>
         <a href="#" class="aun" title="Próximamente">Lanzamientos</a>
         <a href="#sello" data-v="sello">El Sello</a>
@@ -317,6 +327,29 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
           <span class="objeto"><span class="velo" aria-hidden="true">?</span></span>
           <span class="placa"><b>Próximo</b><small>Sin nombre todavía</small></span>
         </button>
+      </div>
+    </div>
+  </main>
+
+  <main class="artefactos" id="v-artistas" hidden>
+    <div class="wrap">
+      <header class="sala-cab">
+        <p class="ceja">Artistas</p>
+        <h2>Quienes escriben los universos.</h2>
+        <p>Toca a un artista para conocer su historia, sus artefactos y dónde escucharlo.</p>
+      </header>
+      <div class="vitrina">
+        <button class="pieza" type="button" data-a="diem" style="--luz:var(--luz-diem);--d:.1s;--f:0s">
+          <span class="haz"></span><span class="foco"></span><span class="charco"></span>
+          <span class="polvo" aria-hidden="true"><i style="--x:44%;--t:0s"></i><i style="--x:56%;--t:2.3s"></i><i style="--x:50%;--t:4.1s"></i></span>
+          <span class="objeto"><img src="diem.png" alt="Logo de Di•eM con una pluma fuente"></span>
+          <span class="placa"><b>Di•eM</b><small>Poeta · MC</small></span>
+        </button>
+        <a class="pieza libre" href="#contacto" style="--luz:var(--luz-proximo);--d:.6s;--f:-3s">
+          <span class="haz" style="opacity:.18"></span><span class="foco"></span><span class="charco" style="opacity:.25"></span>
+          <span class="objeto"><span class="marco-vacio">Este lugar<br>está libre</span></span>
+          <span class="placa"><b>Tu universo aquí</b><small>Escríbenos</small></span>
+        </a>
       </div>
     </div>
   </main>
@@ -451,7 +484,7 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
 <script>
 (function(){
   // ── Secciones (Inicio / Artefactos) ──
-  var vistas={inicio:document.getElementById('v-inicio'),artefactos:document.getElementById('v-artefactos'),sello:document.getElementById('v-sello'),contacto:document.getElementById('v-contacto')};
+  var vistas={inicio:document.getElementById('v-inicio'),artefactos:document.getElementById('v-artefactos'),sello:document.getElementById('v-sello'),contacto:document.getElementById('v-contacto'),artistas:document.getElementById('v-artistas')};
   function ir(){
     var v=(location.hash||'#inicio').slice(1);if(!vistas[v])v='inicio';
     for(var k in vistas)vistas[k].hidden=(k!==v);
@@ -469,11 +502,16 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
       '<p>Un grimorio que se escribe con canciones. Cada capítulo se abre completo el día 13, con su prosa, su canción y su Lado B, abierto para todos.</p>'+
       '<dl class="datos"><dt>Artista</dt><dd>Di•eM</dd><dt>Forma</dt><dd>Libro, álbum y relatos</dd><dt>Ha salido</dt><dd>El grimorio sigue sellado</dd></dl>'+
       '<a class="entrar" href="https://demoniodelatinta.com" target="_blank" rel="noopener">Entrar al grimorio <span aria-hidden="true">↗</span></a>'}},
+    diem:function(){return{luz:'var(--luz-diem)',img:'<img class="diem-img" src="diem.png" alt="">',txt:
+      '<p class="ceja">Artista · Tinta y Ritmo</p><h3 id="ficha-t">Di•eM</h3>'+
+      '<p>Poeta y MC. Escribe desde 2009 y graba desde 2011, entre el boom bap y el R&amp;B. En 2025 volvió al slam y fundó Tinta y Ritmo para contar sus canciones como universos. Hoy escribe Demonio de la Tinta, un grimorio donde cada capítulo es una canción.</p>'+
+      '<dl class="datos"><dt>Artefactos</dt><dd><a href="https://demoniodelatinta.com" target="_blank" rel="noopener" style="color:inherit">Demonio de la Tinta ↗</a></dd></dl>'+
+      '<nav class="redes-f" aria-label="Redes de Di•eM"><a href="https://open.spotify.com/intl-es/artist/7glwFUToqcYzxmNULOf38D" target="_blank" rel="noopener">Spotify</a><a href="https://www.youtube.com/@di.emoficial" target="_blank" rel="noopener">YouTube</a><a href="https://www.instagram.com/di.emoficial" target="_blank" rel="noopener">Instagram</a><a href="https://www.tiktok.com/@di_em0607" target="_blank" rel="noopener">TikTok</a><a href="https://www.facebook.com/profile.php?id=61589251875874" target="_blank" rel="noopener">Facebook</a></nav>'}},
     proximo:function(){return{luz:'var(--luz-proximo)',img:'<span class="velo" aria-hidden="true">?</span>',txt:
       '<p class="ceja">Artefacto</p><h3 id="ficha-t">Próximo</h3><p>Hay otro artefacto en camino. Todavía no tiene nombre.</p>'}}
   };
   var ficha=document.getElementById('ficha'),fImg=document.getElementById('ficha-img'),fTxt=document.getElementById('ficha-txt');
-  document.querySelectorAll('.pieza').forEach(function(b){b.addEventListener('click',function(){
+  document.querySelectorAll('button.pieza').forEach(function(b){b.addEventListener('click',function(){
     var f=FICHAS[b.dataset.a]();fImg.style.setProperty('--luz',f.luz);fImg.innerHTML=f.img;fTxt.innerHTML=f.txt;
     if(ficha.showModal)ficha.showModal();else ficha.setAttribute('open','');
   })});
