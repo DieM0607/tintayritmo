@@ -225,6 +225,31 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
 .redes-f a{color:var(--tinta-suave);text-decoration:none;font-size:14px;border-bottom:1px solid #2a2d33;padding-bottom:3px}
 .redes-f a:hover{color:var(--tinta);border-color:var(--plata-2)}
 .ficha-img .diem-img{max-height:200px}
+/* ── El Tintero ── */
+.tintero{padding-block:clamp(28px,5vw,56px) 90px}
+.tintero .portada{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(24px,5vw,64px);align-items:center}
+.tintero .pantalla{position:relative;aspect-ratio:1;max-width:min(460px,100%);width:100%;justify-self:center;background:#151310;-webkit-mask-image:radial-gradient(closest-side,#000 72%,transparent 100%);mask-image:radial-gradient(closest-side,#000 72%,transparent 100%)}
+.tintero .pantalla video,.tintero .pantalla img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tintero-txt{display:grid;gap:14px}
+.tintero-txt h2{margin:0;font:400 clamp(32px,5vw,56px)/1.04 var(--display);text-wrap:balance}
+.tintero-txt p:not(.ceja){margin:0;color:var(--tinta-suave);max-width:52ch}
+.sesiones-cab{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px;margin-top:clamp(48px,7vw,84px);padding-bottom:14px;border-bottom:1px solid #15171b}
+.sesiones-cab h3{margin:0;font:400 clamp(24px,3vw,32px)/1.1 var(--display)}
+.sesiones{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:24px}
+.sesion{display:grid;gap:10px;color:inherit;text-decoration:none}
+.sesion .mini{position:relative;aspect-ratio:16/9;border-radius:6px;overflow:hidden;background:#101114}
+.sesion .mini img{width:100%;height:100%;object-fit:cover;filter:grayscale(.3) brightness(.85);transition:filter .4s}
+.sesion:hover .mini img{filter:none}
+.sesion b{font:400 19px/1.2 var(--display)}
+.sesion small{font:500 10.5px/1.4 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--tinta-suave)}
+.quieta{display:grid;gap:8px;justify-items:start;margin-top:24px;padding:clamp(22px,3.5vw,34px);border:1px dashed #2a2d33;border-radius:10px}
+.quieta b{font:400 22px/1.2 var(--display)}
+.quieta p{margin:0;color:var(--tinta-suave);max-width:56ch}
+.otros-tinteros{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin-top:clamp(48px,7vw,84px)}
+.otros-tinteros > div{display:grid;gap:10px;align-content:start;padding:clamp(22px,3.5vw,34px);border:1px solid #1c1f24;border-radius:10px}
+.otros-tinteros h3{margin:0;font:400 24px/1.15 var(--display)}
+.otros-tinteros p{margin:0;color:var(--tinta-suave)}
+@media (max-width:860px){.tintero .portada,.otros-tinteros{grid-template-columns:minmax(0,1fr)}.sesiones{grid-template-columns:minmax(0,1fr)}}
 .pie{border-top:1px solid #15171b;padding-block:28px calc(28px + env(safe-area-inset-bottom,0px))}
 .pie .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:14px 28px;justify-content:space-between}
 .pie nav{display:flex;flex-wrap:wrap;gap:6px 22px}
@@ -254,7 +279,7 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
       <nav class="secciones" aria-label="Secciones">
         <a href="#artefactos" data-v="artefactos">Artefactos</a>
         <a href="#artistas" data-v="artistas">Artistas</a>
-        <a href="#" class="aun" title="Próximamente">El Tintero</a>
+        <a href="#tintero" data-v="tintero">El Tintero</a>
         <a href="#" class="aun" title="Próximamente">Lanzamientos</a>
         <a href="#sello" data-v="sello">El Sello</a>
         <a href="#contacto" data-v="contacto">Contacto</a>
@@ -350,6 +375,38 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
           <span class="objeto"><span class="marco-vacio">Este lugar<br>está libre</span></span>
           <span class="placa"><b>Tu universo aquí</b><small>Escríbenos</small></span>
         </a>
+      </div>
+    </div>
+  </main>
+
+  <main class="tintero" id="v-tintero" hidden>
+    <div class="wrap">
+      <div class="portada">
+        <div class="pantalla"><video id="tintero-video" src="tintero.mp4" poster="tintero.jpg" muted playsinline preload="auto" aria-label="El Tintero: cae una gota al tintero y la pluma toca el disco"></video></div>
+        <div class="tintero-txt">
+          <p class="ceja">El Tintero · Programa del sello</p>
+          <h2>Cyphers, slams y sesiones en vivo.</h2>
+          <p>El Tintero es el programa abierto de Tinta y Ritmo: cyphers, slams y lives donde los artistas escriben en voz alta. Aquí se guarda cada sesión.</p>
+          <p>Cada artista del sello puede tener su propio Tintero, ligado a su universo, si así lo quiere.</p>
+        </div>
+      </div>
+
+      <div class="sesiones-cab"><h3>Sesiones</h3><a class="ceja" href="https://www.youtube.com/@TintayRitmoOficial" target="_blank" rel="noopener" style="text-decoration:none">Canal de YouTube ↗</a></div>
+      <div id="sesiones"></div>
+
+      <div class="otros-tinteros">
+        <div>
+          <p class="ceja">Tintero de Di•eM</p>
+          <h3>Demonio de la Tinta</h3>
+          <p>Las lecturas y las sesiones de las canciones del grimorio viven en su propio sitio.</p>
+          <a class="entrar" href="https://demoniodelatinta.com" target="_blank" rel="noopener">Ir al grimorio <span aria-hidden="true">↗</span></a>
+        </div>
+        <div>
+          <p class="ceja">Participa</p>
+          <h3>¿Quieres subir a un cypher o a un slam?</h3>
+          <p>Escríbenos con tu nombre y una muestra de lo que haces.</p>
+          <a class="entrar" href="#contacto">Ir a Contacto</a>
+        </div>
       </div>
     </div>
   </main>
@@ -484,13 +541,15 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
 <script>
 (function(){
   // ── Secciones (Inicio / Artefactos) ──
-  var vistas={inicio:document.getElementById('v-inicio'),artefactos:document.getElementById('v-artefactos'),sello:document.getElementById('v-sello'),contacto:document.getElementById('v-contacto'),artistas:document.getElementById('v-artistas')};
+  var vistas={inicio:document.getElementById('v-inicio'),artefactos:document.getElementById('v-artefactos'),sello:document.getElementById('v-sello'),contacto:document.getElementById('v-contacto'),artistas:document.getElementById('v-artistas'),tintero:document.getElementById('v-tintero')};
   function ir(){
     var v=(location.hash||'#inicio').slice(1);if(!vistas[v])v='inicio';
     for(var k in vistas)vistas[k].hidden=(k!==v);
     document.querySelectorAll('.secciones a').forEach(function(a){if(a.dataset.v===v)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
     if(v!=='inicio'){var e=document.getElementById('entrada');if(e){e.remove();var p=document.getElementById('pagina');p.classList.remove('pre');document.body.classList.add('listo')}}
     window.scrollTo(0,0);
+    var tv=document.getElementById('tintero-video');
+    if(tv){if(v==='tintero'&&!matchMedia('(prefers-reduced-motion: reduce)').matches){try{tv.currentTime=0;var p=tv.play();if(p&&p.catch)p.catch(function(){})}catch(e){}}else{try{tv.pause()}catch(e){}}}
   }
   addEventListener('hashchange',ir);ir();
   document.querySelectorAll('.secciones a.aun').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault()})});
@@ -538,6 +597,16 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
       .catch(function(){aviso.textContent='No se pudo enviar. Inténtalo otra vez o escríbenos a tintayritmo.oficial@gmail.com.'})
       .then(function(){enviar.disabled=false;enviar.textContent='Enviar'});
   });
+
+  // ── El Tintero: sesiones (agregar aquí cada sesión publicada en YouTube) ──
+  // {tipo:'Cypher'|'Slam'|'Live', titulo:'…', fecha:'AAAA-MM-DD', video:'ID de YouTube'}
+  var SESIONES=[];
+  (function(){
+    var c=document.getElementById('sesiones'),hoy=new Date(),MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+    var ya=SESIONES.filter(function(x){return new Date(x.fecha+'T00:00:00')<=hoy}).sort(function(a,b){return a.fecha<b.fecha?1:-1});
+    if(!ya.length){c.innerHTML='<div class="quieta"><p class="ceja">La tinta está quieta</p><b>Todavía no hay sesiones.</b><p>La primera se anuncia aquí y en el canal de YouTube del sello.</p></div>';return}
+    c.innerHTML='<div class="sesiones">'+ya.map(function(x){var f=new Date(x.fecha+'T00:00:00');return '<a class="sesion" href="https://www.youtube.com/watch?v='+x.video+'" target="_blank" rel="noopener"><span class="mini"><img src="https://i.ytimg.com/vi/'+x.video+'/hqdefault.jpg" alt="" loading="lazy"></span><small>'+x.tipo+' · '+f.getDate()+' '+MES[f.getMonth()]+' '+f.getFullYear()+'</small><b>'+x.titulo+'</b></a>'}).join('')+'</div>';
+  })();
 })();
 </script>
 </body>
