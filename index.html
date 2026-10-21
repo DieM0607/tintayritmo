@@ -163,6 +163,27 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
 }
 @media (max-width:480px){.hojas{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
+/* ── El Sello ── */
+.sello{padding-block:clamp(36px,6vw,64px) 90px}
+.sello-cab{display:grid;gap:14px;max-width:720px}
+.sello-cab h2{margin:0;font:400 clamp(32px,5vw,58px)/1.04 var(--display);text-wrap:balance}
+.sello-cab p:not(.ceja){margin:0;color:var(--tinta-suave);max-width:58ch;font-size:17px}
+.oficios{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(18px,3vw,40px);margin-top:clamp(40px,6vw,72px);padding-top:28px;border-top:1px solid #15171b}
+.oficios h3{margin:0 0 8px;font:400 22px/1.15 var(--display)}
+.oficios p{margin:0;color:var(--tinta-suave);font-size:15px;max-width:34ch}
+.casas-cab{margin-top:clamp(56px,8vw,96px)}
+.casas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(10px,2vw,28px);margin-top:28px}
+.casa{--luz:var(--plata-2);position:relative;display:grid;grid-template-rows:240px auto;align-content:start;justify-items:center;gap:22px;padding:56px 12px 8px;text-align:center;isolation:isolate}
+.casa::before{content:"";position:absolute;inset:0 0 90px;z-index:-1;clip-path:polygon(44% 0,56% 0,96% 100%,4% 100%);background:linear-gradient(180deg,color-mix(in srgb,var(--luz) 45%,transparent),color-mix(in srgb,var(--luz) 6%,transparent) 90%);filter:blur(16px);opacity:.45}
+.casa img{display:block;width:min(240px,82%);height:240px;object-fit:contain;filter:drop-shadow(0 16px 22px rgba(0,0,0,.6))}
+.casa b{display:block;font:400 22px/1.1 var(--display)}
+.casa small{display:block;margin-top:6px;font:500 10.5px/1.5 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--tinta-suave)}
+.casa p{margin:10px auto 0;max-width:30ch;color:var(--tinta-suave);font-size:15px}
+.puerta{display:grid;gap:10px;justify-items:start;margin-top:clamp(56px,8vw,96px);padding:clamp(24px,4vw,40px);border:1px solid #1c1f24;border-radius:10px;background:radial-gradient(80% 120% at 0% 0%,#121418,transparent 70%)}
+.puerta h3{margin:0;font:400 clamp(24px,3vw,34px)/1.1 var(--display);text-wrap:balance}
+.puerta p{margin:0;color:var(--tinta-suave);max-width:56ch}
+.puerta .correo{font:500 15px/1.4 var(--mono);color:var(--tinta);user-select:all;word-break:break-all}
+@media (max-width:860px){.oficios,.casas{grid-template-columns:minmax(0,1fr)}.casa{grid-template-rows:200px auto}.casa img{height:200px}}
 .pie{border-top:1px solid #15171b;padding-block:28px calc(28px + env(safe-area-inset-bottom,0px))}
 .pie .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:14px 28px;justify-content:space-between}
 .pie nav{display:flex;flex-wrap:wrap;gap:6px 22px}
@@ -194,7 +215,7 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
         <a href="#" class="aun" title="Próximamente">Artistas</a>
         <a href="#" class="aun" title="Próximamente">El Tintero</a>
         <a href="#" class="aun" title="Próximamente">Lanzamientos</a>
-        <a href="#" class="aun" title="Próximamente">El Sello</a>
+        <a href="#sello" data-v="sello">El Sello</a>
         <a href="#" class="aun" title="Próximamente">Contacto</a>
       </nav>
     </div>
@@ -269,6 +290,45 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
     </div>
   </main>
 
+  <main class="sello" id="v-sello" hidden>
+    <div class="wrap">
+      <header class="sello-cab">
+        <p class="ceja">El Sello</p>
+        <h2>Una casa para que cada artista cree su universo a su manera.</h2>
+        <p>Tinta y Ritmo es sello, casa transmedia y management. Aquí una obra no sale sola: sale con su mundo, su libro, su música y su imagen. Hoy la casa es de Di•eM, y la puerta está abierta para quien quiera construir el suyo.</p>
+      </header>
+
+      <div class="oficios">
+        <div><h3>Sello</h3><p>Publicamos y cuidamos cada lanzamiento, de la primera hoja al disco completo.</p></div>
+        <div><h3>Casa transmedia</h3><p>Cada obra tiene su artefacto y su mundo: libro, canciones, video y escenario contando la misma historia.</p></div>
+        <div><h3>Management</h3><p>Acompañamos la carrera del artista: presentaciones, alianzas y el camino de su universo.</p></div>
+      </div>
+
+      <p class="ceja casas-cab">Las casas</p>
+      <div class="casas">
+        <div class="casa" style="--luz:var(--plata-2)">
+          <img src="casa_tyr.png" alt="Logo de Tinta y Ritmo: vinilo con pluma y pentagrama">
+          <div><b>Tinta y Ritmo</b><small>Sello · Management</small><p>La casa madre, donde nace cada universo.</p></div>
+        </div>
+        <div class="casa" style="--luz:#7d8a96">
+          <img src="casa_garabatos.png" alt="Logo de Garabatos Records: micrófono y pluma en un medallón">
+          <div><b>Garabatos Records</b><small>Audio · Producción</small><p>Donde la música toma forma.</p></div>
+        </div>
+        <div class="casa" style="--luz:#e8dcc2">
+          <img src="casa_butaca.png" alt="Logo de Butaca Cero: una butaca vacía bajo un reflector dentro de un cero">
+          <div><b>Butaca Cero</b><small>Imagen · Cine</small><p>Más cerca que la primera fila.</p></div>
+        </div>
+      </div>
+
+      <div class="puerta">
+        <p class="ceja">Para artistas</p>
+        <h3>¿Tienes un universo por contar?</h3>
+        <p>Escríbenos y cuéntanos de tu obra.</p>
+        <span class="correo">tintayritmo.oficial@gmail.com</span>
+      </div>
+    </div>
+  </main>
+
   <footer class="pie">
     <div class="wrap">
       <nav aria-label="Redes del sello">
@@ -322,7 +382,7 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
 <script>
 (function(){
   // ── Secciones (Inicio / Artefactos) ──
-  var vistas={inicio:document.getElementById('v-inicio'),artefactos:document.getElementById('v-artefactos')};
+  var vistas={inicio:document.getElementById('v-inicio'),artefactos:document.getElementById('v-artefactos'),sello:document.getElementById('v-sello')};
   function ir(){
     var v=(location.hash||'#inicio').slice(1);if(!vistas[v])v='inicio';
     for(var k in vistas)vistas[k].hidden=(k!==v);
