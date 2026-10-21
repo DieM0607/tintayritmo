@@ -184,6 +184,37 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
 .puerta p{margin:0;color:var(--tinta-suave);max-width:56ch}
 .puerta .correo{font:500 15px/1.4 var(--mono);color:var(--tinta);user-select:all;word-break:break-all}
 @media (max-width:860px){.oficios,.casas{grid-template-columns:minmax(0,1fr)}.casa{grid-template-rows:200px auto}.casa img{height:200px}}
+/* ── Contacto ── */
+.contacto{padding-block:clamp(36px,6vw,64px) 90px}
+.contacto .rejilla{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(28px,5vw,72px);align-items:start}
+.contacto-cab{display:grid;gap:14px}
+.contacto-cab h2{margin:0;font:400 clamp(32px,5vw,58px)/1.04 var(--display);text-wrap:balance}
+.contacto-cab p:not(.ceja){margin:0;color:var(--tinta-suave);max-width:46ch}
+.correo-grande{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin-top:10px}
+.correo-grande span{font:500 clamp(15px,1.6vw,18px)/1.4 var(--mono);color:var(--tinta);user-select:all;word-break:break-all}
+.copiar{background:none;border:1px solid var(--plata-3);border-radius:999px;color:var(--tinta-suave);font:500 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;padding:9px 13px;cursor:pointer}
+.copiar:hover{color:var(--tinta);border-color:var(--plata-2)}
+.redes-c{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:6px}
+.redes-c a{color:var(--tinta-suave);text-decoration:none;font:500 14px/1 var(--body);border-bottom:1px solid #2a2d33;padding-bottom:4px}
+.redes-c a:hover{color:var(--tinta);border-color:var(--plata-2)}
+.forma{display:grid;gap:18px;padding:clamp(22px,3.5vw,36px);border:1px solid #1c1f24;border-radius:10px;background:radial-gradient(90% 70% at 100% 0%,#121418,transparent 70%)}
+.campo{display:grid;gap:8px}
+.campo label{font:500 10.5px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--plata-3)}
+.campo input,.campo select,.campo textarea{width:100%;min-width:0;background:#0b0c0f;border:1px solid #23262c;border-radius:6px;color:var(--tinta);font:400 16px/1.5 var(--body);padding:12px 14px}
+.campo textarea{min-height:150px;resize:vertical}
+.campo input:focus,.campo select:focus,.campo textarea:focus{outline:none;border-color:var(--plata-2)}
+.par{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.motivos{display:flex;flex-wrap:wrap;gap:8px}
+.campo .motivos input{position:absolute;width:1px;height:1px;padding:0;border:0;opacity:0;pointer-events:none}
+.motivos label{font:500 13.5px/1 var(--body);letter-spacing:0;text-transform:none;color:var(--tinta-suave);border:1px solid #2a2d33;border-radius:999px;padding:10px 14px;cursor:pointer}
+.motivos input:checked+label{color:var(--fondo,#060709);background:var(--plata-1);border-color:var(--plata-1)}
+.motivos input:focus-visible+label{outline:2px solid var(--plata-2);outline-offset:3px}
+.enviar{justify-self:start;background:var(--plata-1);color:#060709;border:0;border-radius:999px;font:500 15px/1 var(--body);padding:14px 24px;cursor:pointer}
+.enviar:hover{background:#fff}.enviar[disabled]{opacity:.5;cursor:default}
+.aviso{margin:0;font-size:14px;color:var(--tinta-suave)}
+.aviso.ok{color:var(--tinta)}
+.trampa{position:absolute;left:-9999px}
+@media (max-width:860px){.contacto .rejilla,.par{grid-template-columns:minmax(0,1fr)}}
 .pie{border-top:1px solid #15171b;padding-block:28px calc(28px + env(safe-area-inset-bottom,0px))}
 .pie .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:14px 28px;justify-content:space-between}
 .pie nav{display:flex;flex-wrap:wrap;gap:6px 22px}
@@ -216,7 +247,7 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
         <a href="#" class="aun" title="Próximamente">El Tintero</a>
         <a href="#" class="aun" title="Próximamente">Lanzamientos</a>
         <a href="#sello" data-v="sello">El Sello</a>
-        <a href="#" class="aun" title="Próximamente">Contacto</a>
+        <a href="#contacto" data-v="contacto">Contacto</a>
       </nav>
     </div>
   </header>
@@ -325,7 +356,45 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
         <h3>¿Tienes un universo por contar?</h3>
         <p>Escríbenos y cuéntanos de tu obra.</p>
         <span class="correo">tintayritmo.oficial@gmail.com</span>
+        <a class="entrar" href="#contacto">Ir a Contacto</a>
       </div>
+    </div>
+  </main>
+
+  <main class="contacto" id="v-contacto" hidden>
+    <div class="wrap rejilla">
+      <header class="contacto-cab">
+        <p class="ceja">Contacto</p>
+        <h2>Escríbenos.</h2>
+        <p>Para booking, prensa, alianzas o si eres artista y quieres crear tu universo con nosotros. También puedes pedirnos información sobre cualquier obra del sello.</p>
+        <div class="correo-grande"><span id="correo-sello">tintayritmo.oficial@gmail.com</span><button class="copiar" type="button" id="copiar">Copiar</button></div>
+        <nav class="redes-c" aria-label="Redes del sello">
+          <a href="https://www.instagram.com/tintayritmooficial/" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.facebook.com/profile.php?id=61580810854516" target="_blank" rel="noopener">Facebook</a>
+          <a href="https://www.youtube.com/@TintayRitmoOficial" target="_blank" rel="noopener">YouTube</a>
+        </nav>
+      </header>
+
+      <form class="forma" id="forma" novalidate>
+        <div class="campo">
+          <label id="motivo-t">Quiero</label>
+          <div class="motivos" role="radiogroup" aria-labelledby="motivo-t">
+            <input type="radio" name="motivo" id="m1" value="Pedir información" checked><label for="m1">Pedir información</label>
+            <input type="radio" name="motivo" id="m2" value="Mandar información"><label for="m2">Mandar información</label>
+            <input type="radio" name="motivo" id="m3" value="Booking"><label for="m3">Booking</label>
+            <input type="radio" name="motivo" id="m4" value="Soy artista"><label for="m4">Soy artista</label>
+          </div>
+        </div>
+        <div class="par">
+          <div class="campo"><label for="f-nombre">Nombre</label><input id="f-nombre" name="nombre" autocomplete="name" required></div>
+          <div class="campo"><label for="f-correo">Tu correo</label><input id="f-correo" name="email" type="email" autocomplete="email" required></div>
+        </div>
+        <div class="campo"><label for="f-enlace">Enlace (opcional)</label><input id="f-enlace" name="enlace" type="url" placeholder="Tu música, video o carpeta"></div>
+        <div class="campo"><label for="f-mensaje">Mensaje</label><textarea id="f-mensaje" name="mensaje" required></textarea></div>
+        <input class="trampa" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button class="enviar" type="submit" id="enviar">Enviar</button>
+        <p class="aviso" id="aviso" role="status"></p>
+      </form>
     </div>
   </main>
 
@@ -382,7 +451,7 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
 <script>
 (function(){
   // ── Secciones (Inicio / Artefactos) ──
-  var vistas={inicio:document.getElementById('v-inicio'),artefactos:document.getElementById('v-artefactos'),sello:document.getElementById('v-sello')};
+  var vistas={inicio:document.getElementById('v-inicio'),artefactos:document.getElementById('v-artefactos'),sello:document.getElementById('v-sello'),contacto:document.getElementById('v-contacto')};
   function ir(){
     var v=(location.hash||'#inicio').slice(1);if(!vistas[v])v='inicio';
     for(var k in vistas)vistas[k].hidden=(k!==v);
@@ -410,6 +479,27 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
   })});
   document.getElementById('cerrar').addEventListener('click',function(){ficha.close()});
   ficha.addEventListener('click',function(e){if(e.target===ficha)ficha.close()});
+
+  // ── Contacto: copiar correo y formulario (Formspree) ──
+  var FORMSPREE='';// código del formulario de Formspree, p. ej. 'xyzabcde'
+  document.getElementById('copiar').addEventListener('click',function(){
+    var b=this,t=document.getElementById('correo-sello').textContent;
+    function hecho(){b.textContent='Copiado';setTimeout(function(){b.textContent='Copiar'},1800)}
+    if(navigator.clipboard)navigator.clipboard.writeText(t).then(hecho,function(){var r=document.createRange();r.selectNodeContents(document.getElementById('correo-sello'));getSelection().removeAllRanges();getSelection().addRange(r)});
+  });
+  var forma=document.getElementById('forma'),aviso=document.getElementById('aviso'),enviar=document.getElementById('enviar');
+  forma.addEventListener('submit',function(e){
+    e.preventDefault();aviso.className='aviso';
+    var n=forma.nombre.value.trim(),c=forma.email.value.trim(),m=forma.mensaje.value.trim();
+    if(!n||!c||!m){aviso.textContent='Escribe tu nombre, tu correo y el mensaje.';return}
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(c)){aviso.textContent='Revisa tu correo: parece que le falta algo.';return}
+    if(!FORMSPREE){aviso.textContent='El formulario todavía no está conectado. Mientras, escríbenos a tintayritmo.oficial@gmail.com.';return}
+    enviar.disabled=true;enviar.textContent='Enviando…';
+    fetch('https://formspree.io/f/'+FORMSPREE,{method:'POST',body:new FormData(forma),headers:{Accept:'application/json'}})
+      .then(function(r){if(!r.ok)throw 0;forma.reset();aviso.className='aviso ok';aviso.textContent='Recibido. Te respondemos a tu correo.'})
+      .catch(function(){aviso.textContent='No se pudo enviar. Inténtalo otra vez o escríbenos a tintayritmo.oficial@gmail.com.'})
+      .then(function(){enviar.disabled=false;enviar.textContent='Enviar'});
+  });
 })();
 </script>
 </body>
