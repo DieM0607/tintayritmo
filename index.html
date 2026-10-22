@@ -1,14 +1,7 @@
-<!doctype html>
-<html lang="es">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Tinta y Ritmo: sello, casa transmedia y management.">
-<link rel="icon" href="logo.png">
-<title>Tinta y Ritmo</title>
+<title>La casa del sello</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Gloock&family=Hanken+Grotesk:wght@400;500&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Gloock&family=Hanken+Grotesk:wght@400;500&family=JetBrains+Mono:wght@500&family=Montserrat:wght@500&family=Noto+Sans+Math&family=Noto+Sans+Canadian+Aboriginal&display=swap">
 <style>
 /* Layout: una entrada a pantalla completa (el vinilo que gira) que, al tocarlo, se hunde en sí mismo y renace como la clave de sol sobre el pentagrama. Después, la barra con el logo arriba a la izquierda. */
 :root{
@@ -59,6 +52,7 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
 .barra .wrap{display:flex;align-items:center;gap:22px;min-height:64px}
 .marca{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;font:400 19px/1 var(--display);white-space:nowrap}
 .marca img{width:38px;height:38px;object-fit:contain}
+#viniloClave{cursor:pointer;pointer-events:all}
 .secciones{display:flex;gap:2px;margin-left:auto;overflow-x:auto;scrollbar-width:none;min-width:0}
 .secciones::-webkit-scrollbar{display:none}
 .secciones a{text-decoration:none;font:500 13.5px/1 var(--body);color:var(--tinta-suave);padding:12px 11px;white-space:nowrap}
@@ -91,6 +85,9 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
 .pre .clave .aparece{opacity:0;transform:scale(.6)}
 .pre .clave .vinilo-clave{opacity:0}
 .pre .lineas i{transform:scaleX(0)}
+.sin-lineas .lineas i{opacity:0}
+.lineas-ya .lineas i{transition:none !important;transform:none !important}
+.pentagrama-vuela{position:fixed;inset:0;width:100%;height:100%;z-index:61;pointer-events:none;fill:none;stroke-width:1.4;stroke-linecap:round}
 .pre .renglon h1{opacity:0;transform:translateY(14px);filter:blur(6px)}
 .pre .gotas-vivas{display:none}
 .clave .dibuja{stroke-dasharray:var(--len);stroke-dashoffset:0;transition:stroke-dashoffset 1.1s cubic-bezier(.5,0,.2,1) var(--d,0s)}
@@ -169,6 +166,11 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
 .sello-cab{display:grid;gap:14px;max-width:720px}
 .sello-cab h2{margin:0;font:400 clamp(32px,5vw,58px)/1.04 var(--display);text-wrap:balance}
 .sello-cab p:not(.ceja){margin:0;color:var(--tinta-suave);max-width:58ch;font-size:17px}
+.nosotros{margin-top:clamp(40px,6vw,72px);padding-top:clamp(36px,5vw,56px);border-top:1px solid #15171b;scroll-margin-top:90px}
+.nosotros .oficios{margin-top:clamp(36px,5vw,56px);padding-top:0;border-top:0}
+.presenta{margin:0 auto;max-width:44ch;text-align:center;font:italic 400 clamp(19px,2.3vw,25px)/1.45 var(--display);color:var(--plata-1);text-wrap:balance;scroll-margin-top:90px;color:var(--plata-2)}
+.frase-sala{margin:4px 0 8px;text-align:center;font:italic 400 clamp(17px,2vw,21px)/1.4 var(--display);color:var(--plata-2)}
+.ficha .lema{margin:-4px 0 10px;font:italic 400 16px/1.3 var(--display);color:var(--plata-3)}
 .oficios{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(18px,3vw,40px);margin-top:clamp(40px,6vw,72px);padding-top:28px;border-top:1px solid #15171b}
 .oficios h3{margin:0 0 8px;font:400 22px/1.15 var(--display)}
 .oficios p{margin:0;color:var(--tinta-suave);font-size:15px;max-width:34ch}
@@ -279,31 +281,411 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
   .gotas-vivas{display:none}
   .lineas{left:-16px}
 }
+
+/* ── Inicio: en el pentagrama, las secciones para escoger ── */
+.renglon h1.hueco{visibility:hidden}
+.notas{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));align-items:center;justify-items:center}
+.nota{position:relative;text-decoration:none;white-space:nowrap;font:400 clamp(13px,2.1vw,28px)/1 var(--display);padding:4px 2px;background:linear-gradient(180deg,var(--plata-1) 0%,var(--plata-2) 60%,var(--plata-3) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;clip-path:inset(-30% -10% -30% -10%);transition:clip-path 1s cubic-bezier(.5,0,.2,1) calc(1.3s + var(--n)*.16s),filter .3s}
+.nota:nth-child(3n+2){transform:translateY(-22%)}
+.nota:nth-child(3n){transform:translateY(18%)}
+.nota:hover,.nota:focus-visible{filter:brightness(1.35) drop-shadow(0 0 10px rgba(244,245,246,.25))}
+.pre .nota{clip-path:inset(-30% 110% -30% -10%)}
+.letrero{position:absolute;left:0;right:0;top:100%;margin:14px 0 0;text-align:center;font:italic 400 clamp(13px,1.5vw,18px)/1.4 var(--display);color:var(--tinta-suave);transition:opacity .9s ease 2.4s}
+.pre .letrero{opacity:0}
+.titulo-partitura{position:absolute;left:0;right:0;bottom:100%;margin:0 0 clamp(14px,2.4vw,28px);text-align:center;font:500 clamp(12px,1.6vw,20px)/1 "Montserrat",var(--body);letter-spacing:.38em;padding-left:.38em;color:var(--plata-1);transition:opacity 1s ease 1.1s}
+.pre .titulo-partitura{opacity:0}
+
+/* ── La casa del sello por secciones ── */
+.solo4 .notas{grid-template-columns:repeat(2,minmax(0,1fr))}
+.solo4 .nota:nth-child(3n+2),.solo4 .nota:nth-child(3n){transform:none}
+.solo4 .nota:nth-child(2){transform:translateY(-18%)}
+.solo4 .nota:nth-child(3){transform:translateY(14%)}
+.sala-cab.centro{text-align:center;justify-items:center;margin-inline:auto}
+
+/* Artefactos: el pasillo de las reliquias */
+#v-artefactos{background:radial-gradient(70% 50% at 50% 100%,#101216,transparent 70%)}
+.pasillo{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(36px,8vw,120px);padding:30px 0 60px}
+.reliquia{position:relative;display:grid;justify-items:center;width:min(300px,78vw);background:none;border:0;padding:0;color:inherit;cursor:pointer;isolation:isolate;animation:sube 1.2s ease both var(--d,0s)}
+.reliquia.cubierta{cursor:default}
+@keyframes sube{from{opacity:0;transform:translateY(16px)}}
+.reliquia .halo{position:absolute;left:-20%;right:-20%;top:-90px;bottom:60px;z-index:-1;background:conic-gradient(from 160deg at 50% 0%,transparent 0deg,rgba(230,232,236,.16) 14deg,rgba(230,232,236,.22) 20deg,rgba(230,232,236,.16) 26deg,transparent 40deg);-webkit-mask:linear-gradient(#000 40%,transparent);mask:linear-gradient(#000 40%,transparent);filter:blur(6px)}
+.reliquia .halo.tenue{opacity:.35}
+.caja{position:relative;display:grid;place-items:center;width:100%;aspect-ratio:3/3.6;border:1px solid rgba(214,220,228,.22);border-bottom:0;background:linear-gradient(115deg,rgba(255,255,255,.07),rgba(255,255,255,0) 38%,rgba(255,255,255,.035) 70%,rgba(255,255,255,0));box-shadow:inset 0 0 40px rgba(0,0,0,.6);overflow:hidden}
+.caja::before{content:"";position:absolute;inset:-1px -1px auto;height:10px;background:linear-gradient(180deg,#3a3d43,#16181c);border-bottom:1px solid #4a4e55}
+.caja img{width:66%;height:auto;filter:drop-shadow(0 22px 22px rgba(0,0,0,.8));animation:flota 7s ease-in-out infinite;transition:transform .8s cubic-bezier(.3,1.2,.5,1)}
+@keyframes flota{50%{transform:translateY(-7px)}}
+.reliquia:hover .caja img,.reliquia:focus-visible .caja img{transform:scale(1.05)}
+.brillo-vidrio{position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.14) 45%,transparent 55%);transform:translateX(-120%);pointer-events:none}
+.reliquia:hover .brillo-vidrio,.reliquia:focus-visible .brillo-vidrio{transform:translateX(120%);transition:transform 1.1s ease}
+.pano{position:absolute;inset:8% 6% 0;border-radius:46% 46% 4% 4%/26% 26% 4% 4%;background:repeating-linear-gradient(92deg,#121418 0 14px,#1a1d22 14px 22px,#0f1114 22px 34px),#121418;box-shadow:inset 0 10px 24px rgba(255,255,255,.04),0 -2px 0 #22252b;-webkit-mask:linear-gradient(#000 85%,rgba(0,0,0,.85));mask:linear-gradient(#000 85%,rgba(0,0,0,.85))}
+.pedestal{position:relative;display:grid;place-items:center;width:112%;padding:16px 0 18px;background:linear-gradient(180deg,#1b1d22,#0b0c0e);border-top:1px solid #3a3d43;box-shadow:0 30px 40px rgba(0,0,0,.7)}
+.placa-laton{display:grid;gap:2px;padding:9px 18px 8px;border-radius:2px;background:linear-gradient(180deg,#ecd39c,#b8955a 55%,#9a7642);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 2px 4px rgba(0,0,0,.6);color:#2b2010;text-align:center}
+.placa-laton b{font:400 17px/1.1 var(--display);text-shadow:0 1px 0 rgba(255,255,255,.35)}
+.placa-laton small{font:500 9.5px/1.2 var(--mono);letter-spacing:.2em;text-transform:uppercase;opacity:.8}
+.placa-laton.apagada{filter:grayscale(.7) brightness(.55)}
+.polvo{position:absolute;inset:0 0 80px;pointer-events:none;z-index:1}
+.polvo i{position:absolute;left:var(--x);bottom:10%;width:2px;height:2px;border-radius:50%;background:#e9ebee;opacity:0;animation:polvo 8s linear infinite var(--t)}
+.ficha.relicario .ficha-img img{animation:gira-reliquia 9s ease-in-out infinite;transform-style:preserve-3d}
+@keyframes gira-reliquia{0%,100%{transform:perspective(900px) rotateY(-14deg)}50%{transform:perspective(900px) rotateY(14deg)}}
+
+/* Artefactos: la cámara de las reliquias. Un pasillo en 3D (CSS) que se recorre deslizando; al fondo, el relicario del grimorio. */
+main.artefactos{padding:0}
+.camara{position:relative;height:calc(100svh - var(--barra,65px));min-height:460px;overflow:hidden;perspective-origin:50% 40%;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;background:#020203}
+.camara.arrastra{cursor:grabbing}
+.mundo{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d;will-change:transform}
+.mundo>*{position:absolute;left:0;top:0;transform-style:preserve-3d}
+.muro{backface-visibility:hidden}
+.piso{background:linear-gradient(90deg,transparent 39%,#100608 39.4%,#170809 50%,#100608 60.6%,transparent 61%),linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px) 0 0/100% 140px,linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px) 0 0/25% 100%,#0a0b0d}
+.techo{background:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px) 0 0/100% 280px,#040405}
+.pared{background:linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px) 0 0/280px 100%,linear-gradient(180deg,#09090b 0,#0c0d10 62%,#16171b 62.3%,#0b0c0e 63%,#08090a 100%)}
+.fondo{background:radial-gradient(38% 46% at 50% 62%,rgba(163,34,45,.16),transparent 70%),#050506;box-shadow:inset 0 0 120px #000}
+.fondo::before{content:"";position:absolute;left:30%;right:30%;top:16%;bottom:0;border:1px solid rgba(214,220,228,.08);border-bottom:0;border-radius:50% 50% 0 0/22% 22% 0 0}
+/* vitrinas laterales: a oscuras, placa sin grabar */
+.vit{display:grid;grid-template-rows:68% 32%;filter:brightness(.42);transition:filter 1.4s ease}
+.viva .vit.alcanza{filter:brightness(.8)}
+.vit .vidrio{position:relative;border:1px solid rgba(214,220,228,.2);border-bottom:0;background:linear-gradient(115deg,rgba(255,255,255,.07),rgba(255,255,255,0) 40%,rgba(255,255,255,.03) 72%,rgba(255,255,255,0)),#060709;box-shadow:inset 0 0 50px #000}
+.vit .vidrio::before{content:"";position:absolute;inset:-1px -1px auto;height:9px;background:linear-gradient(180deg,#3a3d43,#16181c)}
+.vit .vidrio::after{content:"";position:absolute;left:26%;right:26%;bottom:10%;height:9%;border-radius:50% 50% 8% 8%;background:linear-gradient(180deg,#1c0a0d,#0b0405)}
+.vit .base{display:grid;place-items:center;background:linear-gradient(180deg,#1b1d22,#0b0c0e);border-top:1px solid #3a3d43}
+.placa-ciega{width:46%;height:26%;border-radius:2px;background:linear-gradient(180deg,#ecd39c,#b8955a 55%,#9a7642);filter:grayscale(.55) brightness(.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+/* apliques de luz que se encienden hacia el fondo */
+.aplique{display:grid;justify-items:center}
+.aplique i{width:26%;height:16%;border-radius:40% 40% 50% 50%;background:linear-gradient(180deg,#ecd39c,#7a5d33);opacity:.35}
+.aplique b{position:absolute;inset:0;border-radius:50%;background:radial-gradient(closest-side,rgba(255,236,200,.5),rgba(255,214,160,.12) 45%,transparent);opacity:0}
+.charco{border-radius:50%;background:radial-gradient(closest-side,rgba(255,226,180,.12),transparent);opacity:0}
+.viva .aplique b,.viva .charco{animation:prende 1.3s ease forwards var(--d)}
+.viva .aplique i{animation:prende-i 1.3s ease forwards var(--d)}
+@keyframes prende{0%{opacity:0}18%{opacity:.8}26%{opacity:.1}40%{opacity:.9}100%{opacity:1}}
+@keyframes prende-i{to{opacity:1;box-shadow:0 0 18px 6px rgba(255,220,170,.35)}}
+/* el relicario */
+.relicario{display:grid;grid-template-rows:auto 74% 1fr;justify-items:center;padding:0;border:0;background:none;color:inherit;cursor:pointer;font:inherit;-webkit-tap-highlight-color:transparent}
+.relicario:focus-visible{outline:none}
+.relicario:focus-visible .rel-cuerpo{outline:2px solid var(--azul);outline-offset:6px}
+.rel-haz{position:absolute;left:-30%;right:-30%;top:-70%;height:150%;background:linear-gradient(180deg,rgba(240,226,200,.0),rgba(240,226,200,.14) 40%,rgba(240,226,200,.04));clip-path:polygon(44% 0,56% 0,92% 100%,8% 100%);filter:blur(8px);opacity:0;pointer-events:none}
+.rel-luz{position:absolute;left:-45%;right:-45%;top:-10%;bottom:10%;background:radial-gradient(closest-side,rgba(163,34,45,.55),rgba(163,34,45,.14) 55%,transparent);opacity:0;pointer-events:none}
+.viva .rel-haz{animation:prende 1.4s ease forwards var(--d)}
+.viva .rel-luz{animation:late 3.4s ease-in-out infinite calc(var(--d) + 1s)}
+@keyframes late{0%,100%{opacity:.35;transform:scale(.94)}50%{opacity:.95;transform:scale(1.04)}}
+.rel-remate{width:20%;aspect-ratio:1;margin-bottom:-2px;background:radial-gradient(circle at 50% 40%,#ecd39c,#9a7642 60%,#5a4426);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)}
+.rel-cuerpo{position:relative;width:100%;height:100%;padding:3.5%;border-radius:50% 50% 0 0/24% 24% 0 0;background:linear-gradient(90deg,#7a5d33,#ecd39c 22%,#b8955a 50%,#ecd39c 78%,#7a5d33);box-shadow:0 0 0 1px #3a2c16,0 30px 40px rgba(0,0,0,.8);transform-style:preserve-3d}
+.rel-interior{position:relative;display:grid;place-items:center;width:100%;height:100%;border-radius:50% 50% 0 0/23% 23% 0 0;overflow:hidden;background:radial-gradient(70% 50% at 50% 55%,#3a0c13,#160508 70%,#0b0304)}
+.rel-interior::after{content:"";position:absolute;left:14%;right:14%;bottom:7%;height:16%;border-radius:50% 50% 12% 12%;background:linear-gradient(180deg,#5a121c,#2a070c);box-shadow:inset 0 3px 6px rgba(255,255,255,.08),0 8px 14px rgba(0,0,0,.7)}
+.rel-interior img{position:relative;z-index:1;width:72%;margin-top:-6%;filter:drop-shadow(0 14px 14px rgba(0,0,0,.8)) drop-shadow(0 0 14px rgba(163,34,45,.5));animation:flota 7s ease-in-out infinite}
+.rel-puerta{position:absolute;top:3.5%;bottom:0;width:46.5%;background:linear-gradient(115deg,rgba(255,255,255,.16),rgba(255,255,255,.02) 38%,rgba(255,255,255,.08) 64%,rgba(255,255,255,.01));box-shadow:inset 0 0 0 2px #b8955a,inset 0 0 0 3px #5a4426;transition:transform 1s cubic-bezier(.6,0,.2,1);pointer-events:none}
+.rel-puerta.izq{left:3.5%;border-radius:100% 0 0 0/23% 0 0 0;transform-origin:0 50%}
+.rel-puerta.der{right:3.5%;border-radius:0 100% 0 0/0 23% 0 0;transform-origin:100% 50%}
+.relicario.abierto .rel-puerta.izq{transform:rotateY(-105deg)}
+.relicario.abierto .rel-puerta.der{transform:rotateY(105deg)}
+.relicario.abierto .rel-interior img{opacity:0;transition:opacity .2s .9s}
+.rel-base{display:grid;place-items:center;width:118%;background:linear-gradient(180deg,#1f2126,#0b0c0e);border-top:2px solid #b8955a;box-shadow:0 30px 40px rgba(0,0,0,.8)}
+.rel-base .placa-laton{transform:scale(var(--pl,1))}
+/* sobre la escena */
+.niebla{position:absolute;inset:0;pointer-events:none;background:radial-gradient(75% 70% at 50% 45%,transparent 40%,rgba(0,0,0,.65))}
+.cam-cab{position:absolute;left:0;right:0;top:clamp(18px,4vh,40px);pointer-events:none;transition:opacity .4s}
+.cam-cab h2{margin:0;font:400 clamp(28px,4.2vw,48px)/1.05 var(--display);text-wrap:balance;text-shadow:0 2px 20px #000}
+.cam-cab p{margin:0;color:var(--tinta-suave);max-width:46ch;text-shadow:0 1px 10px #000}
+.mando{position:absolute;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;align-items:center;gap:12px;padding:6px;border:1px solid #23262c;border-radius:999px;background:rgba(6,7,9,.72);backdrop-filter:blur(6px)}
+.mando button{width:38px;height:38px;border-radius:50%;border:1px solid #2c3036;background:none;color:var(--tinta);font:400 16px/1 var(--body);cursor:pointer}
+.mando button:hover{border-color:var(--plata-2)}
+.mando button:disabled{opacity:.3;cursor:default}
+.mando span{font:500 10px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--tinta-suave);white-space:nowrap}
+/* la reliquia abierta */
+.revelacion{width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:transparent;color:var(--tinta);overflow:auto}
+.revelacion::backdrop{background:rgba(2,2,3,.9);backdrop-filter:blur(5px)}
+.revelacion[open]{animation:rev-entra .6s ease}
+@keyframes rev-entra{from{background:transparent}}
+.rev-in{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);align-items:center;gap:clamp(20px,4vw,56px);min-height:100%;max-width:1180px;margin:0 auto;padding:clamp(56px,6vw,72px) clamp(16px,4vw,44px) 40px}
+.rev-escena{--E:min(72vh,600px);position:relative;width:var(--E);height:var(--E);justify-self:center}
+.rev-escena .rev-luz{position:absolute;inset:8%;border-radius:50%;background:radial-gradient(closest-side,rgba(163,34,45,.5),rgba(163,34,45,.1) 60%,transparent);animation:late 3.4s ease-in-out infinite}
+.rev-libro{position:absolute;left:50%;top:50%;width:36%;translate:-50% -50%;filter:drop-shadow(0 26px 26px rgba(0,0,0,.85)) drop-shadow(0 0 22px rgba(163,34,45,.55))}
+.rev-libro.gira{animation:gira-libro 10s ease-in-out infinite}
+@keyframes gira-libro{0%,100%{transform:perspective(900px) rotateY(-16deg) translateY(0)}50%{transform:perspective(900px) rotateY(16deg) translateY(-10px)}}
+.fragmentos{position:absolute;inset:0;margin:0;padding:0;list-style:none;pointer-events:none}
+.frag{position:absolute;left:var(--x);top:var(--y);width:24%;translate:-50% -50%;pointer-events:auto;opacity:0}
+.revelacion.vivo .frag{animation:desenrolla .9s cubic-bezier(.3,1.3,.5,1) forwards var(--d),flota-f 7s ease-in-out infinite calc(var(--d) + .9s)}
+@keyframes desenrolla{from{opacity:0;transform:scale(.4) rotate(0deg);clip-path:inset(45% 0 45% 0)}to{opacity:1;transform:scale(1) rotate(var(--r));clip-path:inset(0)}}
+@keyframes flota-f{0%,100%{opacity:1;transform:rotate(var(--r)) translateY(0)}50%{opacity:1;transform:rotate(var(--r)) translateY(-8px)}}
+.hoja-f{position:relative;display:grid;gap:4px;justify-items:center;padding:16% 10% 20%;aspect-ratio:3/4;color:#2a1e12;text-align:center;text-decoration:none;background:radial-gradient(120% 90% at 50% 40%,#e2d6b6,#cfc3a3 60%,#a99a74);box-shadow:0 14px 26px rgba(0,0,0,.7),inset 0 0 18px rgba(90,60,20,.35);border-radius:2px}
+.hoja-f::before,.hoja-f::after{content:"";position:absolute;left:-3%;right:-3%;height:9%;border-radius:40%;background:linear-gradient(180deg,#b9aa82,#8d7d58);box-shadow:0 2px 4px rgba(0,0,0,.4)}
+.hoja-f::before{top:-4%}.hoja-f::after{bottom:-4%}
+.hoja-f small{font:500 clamp(7px,.8vw,9px)/1.2 var(--mono);letter-spacing:.18em;text-transform:uppercase;opacity:.7}
+.hoja-f b{font:400 clamp(15px,1.8vw,22px)/1.05 var(--display)}
+.hoja-f em{font:500 clamp(13px,1.3vw,17px)/1 var(--mano);font-style:normal;color:#5a2b22}
+.hoja-f img{width:38%;margin-top:4%;filter:drop-shadow(0 3px 3px rgba(0,0,0,.4))}
+a.hoja-f:hover{filter:brightness(1.08)}
+.rev-txt{display:grid;gap:14px;align-content:center;opacity:0;transition:opacity .8s ease .9s}
+.revelacion.vivo .rev-txt{opacity:1}
+.rev-txt h3{margin:0;font:400 clamp(32px,4vw,48px)/1 var(--display)}
+.rev-txt p{margin:0;color:var(--tinta-suave);max-width:46ch}
+.revelacion .cerrar{position:fixed}
+@media (max-width:860px){
+  .rev-in{grid-template-columns:minmax(0,1fr);align-content:start}
+  .rev-escena{--E:min(92vw,440px)}
+  .frag{width:25%}
+}
+
+/* Artefactos: la sala de las reliquias en línea plateada */
+.muro-art{padding-top:18px}
+.cristal{fill:rgba(9,10,12,.62)}
+.hoja-rel .cristal{fill:rgba(205,210,216,.04)}
+.contraluz{fill:url(#contraluz);opacity:0;transition:opacity 1.6s ease var(--d,0s)}
+.contraluz.dorada{fill:url(#contraluz-oro)}
+.vivo .contraluz{opacity:1}
+.silueta{fill:#030304;stroke:#030304}
+.silueta .brillo-s{fill:none;stroke:rgba(200,205,212,.12);stroke-width:1.5}
+.silueta .brillo-s.dorado{stroke:rgba(217,180,106,.35);stroke-width:2}
+.cifra{font:400 10.5px "Noto Sans Math","Noto Sans Canadian Aboriginal","Segoe UI Symbol",serif;fill:var(--plata-2);text-anchor:middle;white-space:pre}
+.relicario-l{cursor:pointer;outline:none}
+.relicario-l:focus-visible .l{stroke:var(--plata-1)}
+.pulso-rel{fill:url(#pulso);opacity:0}
+.vivo .pulso-rel{animation:late 3.4s ease-in-out infinite var(--d)}
+@keyframes late{0%,100%{opacity:.35}50%{opacity:1}}
+.hoja-rel{transform-box:fill-box;transition:transform 1s cubic-bezier(.6,0,.2,1)}
+.hoja-rel.izq{transform-origin:0 50%}
+.hoja-rel.der{transform-origin:100% 50%}
+.relicario-l.abierto .hoja-rel{transform:scaleX(.12)}
+.relicario-l.abierto .libro-rel{opacity:0;transition:opacity .2s}
+.rev-in.solo{grid-template-columns:minmax(0,1fr);justify-items:center;align-content:center;gap:10px}
+.rev-pie .entrar{justify-self:center}
+.rev-pie{display:grid;justify-items:center;gap:10px;text-align:center;opacity:0;transition:opacity .8s ease 1.4s}
+.revelacion.vivo .rev-pie{opacity:1}
+.cifra-h{margin:0;font:400 clamp(13px,1.6vw,18px)/1.4 "Noto Sans Math","Noto Sans Canadian Aboriginal","Segoe UI Symbol",serif;color:var(--plata-2);white-space:pre}
+.rev-escena .frag{width:22%}
+.hoja-sellada{display:grid;justify-items:center;gap:8px}
+.hoja-sellada img{width:100%;filter:drop-shadow(0 16px 20px rgba(0,0,0,.7))}
+.hoja-sellada small{font:500 11px/1 var(--mono);letter-spacing:.18em;color:var(--plata-2)}
+@media (max-width:860px){.rev-escena .frag{width:26%}.cifra-h{white-space:normal}}
+.muro-art .tras{fill:#08090b}
+
+/* El Tintero: el escenario en línea */
+.lienzo-tin{position:relative;height:min(74vh,calc(100vw * 700 / 1400));min-height:420px;aspect-ratio:2/1;margin-inline:auto}
+.muro-sello .lienzo-tin svg{position:absolute;inset:0;width:100%;height:100%;min-height:0}
+.tin-video{position:absolute;left:calc(573 / 1400 * 100%);top:calc(153 / 700 * 100%);width:calc(254 / 1400 * 100%);aspect-ratio:1;object-fit:contain;background:#14130f;opacity:0;transition:opacity .8s ease .2s}
+.vivo .tin-video{opacity:1}
+.tin-fuente{display:none}
+#tin-luz{cursor:crosshair;touch-action:pan-y}
+/* el tocadiscos de El Tintero, sin luz hasta que le pones un disco */
+.fono{position:relative;width:min(440px,86vw);aspect-ratio:925/845;margin:10px auto 0;isolation:isolate}
+.fono::before{content:"";position:absolute;inset:-8%;z-index:-1;border-radius:50%;background:radial-gradient(closest-side,rgba(214,176,108,.22),transparent);opacity:0;transition:opacity 1.2s ease}
+.fono img{position:absolute;inset:0;width:100%;height:100%;filter:blur(3px) brightness(.26) saturate(.5);transition:filter 1.2s ease,transform .9s cubic-bezier(.5,0,.2,1)}
+.fono-base{z-index:1}.fono-pluma{z-index:3;transform-origin:73.08% 19.88%}
+.fono.encendida::before{opacity:1}
+.fono.encendida img{filter:none}
+.fono.baja .fono-pluma{transform:rotate(11deg)}
+.fono-plato{position:absolute;z-index:2;left:45.35%;top:51.24%;width:55.1%;aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none}
+.aterriza{position:absolute;inset:0}
+.aterriza .aplasta{position:absolute;inset:0}
+.aterriza .vinilo{position:absolute;inset:0;filter:drop-shadow(0 8px 10px rgba(0,0,0,.6));display:grid;place-items:center;border-radius:50%;background:conic-gradient(from 20deg,rgba(255,255,255,0) 0deg,rgba(255,255,255,.13) 28deg,rgba(255,255,255,0) 60deg,rgba(255,255,255,0) 180deg,rgba(255,255,255,.1) 208deg,rgba(255,255,255,0) 240deg),repeating-radial-gradient(circle,#0b0b0c 0 1.4px,#19191b 1.4px 2.6px);box-shadow:0 0 0 1px #2a2b2e,inset 0 0 0 3px #050506}
+.aterriza.gira .vinilo{animation:gira 1.8s linear infinite}
+.disco-v.fuera .vinilo{visibility:hidden}
+.disco-l{cursor:pointer;outline:none}
+.disco-l:focus-visible .l{stroke:var(--plata-1)}
+.disco-l .luz-disco{fill:url(#luz-disco);opacity:0;transition:opacity .6s}
+.disco-l:hover .luz-disco{opacity:.6}
+.disco-l[aria-selected="true"] .luz-disco{opacity:1}
+.etiqueta-l{fill:#8b9098}
+.disco-l[aria-selected="true"] .etiqueta-l{fill:var(--plata-1)}
+.brillo-l{fill:none;stroke:rgba(230,232,236,.35);stroke-width:2;stroke-linecap:round;opacity:0;transition:opacity .4s}
+.disco-l[aria-selected="true"] .brillo-l{opacity:1;animation:brillo-gira 1.6s linear infinite}
+@keyframes brillo-gira{50%{opacity:.15}}
+.brazo-l{transition:transform .9s cubic-bezier(.5,0,.2,1);transform:rotate(-28deg)}
+.disco-l[aria-selected="true"] .surcos{animation:gira 1.8s linear infinite}
+.disco-l[aria-selected="true"] .brazo-l{transform:rotate(0deg)}
+.disco-l[aria-selected="true"] .placa-t{fill:var(--plata-1)}
+@media (max-width:760px){.lienzo-tin{height:440px;min-height:0}}
+
+/* los discos de El Tintero: vinilos como los de los logos, con la pluma de aguja */
+.discos-v{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:820px;margin-inline:auto;gap:clamp(18px,4vw,56px);padding:26px clamp(10px,3vw,40px) 6px}
+.disco-v{display:grid;justify-items:center;gap:14px;background:none;border:0;padding:0;color:var(--tinta-suave);cursor:pointer}
+.disco-v b{font:400 clamp(15px,1.7vw,20px)/1.1 var(--display);text-align:center}
+.disco-v .plato{position:relative;width:min(150px,100%);aspect-ratio:1}
+.disco-v .vinilo{position:absolute;inset:0;display:grid;place-items:center;border-radius:50%;background:conic-gradient(from 20deg,rgba(255,255,255,0) 0deg,rgba(255,255,255,.13) 28deg,rgba(255,255,255,0) 60deg,rgba(255,255,255,0) 180deg,rgba(255,255,255,.1) 208deg,rgba(255,255,255,0) 240deg),repeating-radial-gradient(circle,#0b0b0c 0 1.4px,#19191b 1.4px 2.6px);box-shadow:0 0 0 1px #2a2b2e,inset 0 0 0 3px #050506,0 16px 26px rgba(0,0,0,.7);transition:box-shadow .5s}
+.disco-v .etq,.aterriza .etq{width:34%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#0b0b0c 0 7%,#e9dfc6 8% 64%,#c9b994 65% 70%,#e9dfc6 71%);box-shadow:0 0 0 2px #0b0b0c}
+.disco-v .aguja{position:absolute;left:39%;top:-41%;width:70%;height:auto;transform-origin:98.5% 69%;transform:rotate(24deg);transition:transform .9s cubic-bezier(.5,0,.2,1);filter:drop-shadow(0 6px 6px rgba(0,0,0,.6));pointer-events:none}
+.disco-v:hover .vinilo{box-shadow:0 0 0 1px #6d7279,inset 0 0 0 3px #050506,0 16px 26px rgba(0,0,0,.7)}
+.disco-v[aria-selected="true"]{color:var(--tinta)}
+.disco-v[aria-selected="true"] .vinilo{animation:gira 1.8s linear infinite;box-shadow:0 0 0 1px #a9aeb5,inset 0 0 0 3px #050506,0 0 34px rgba(220,224,230,.12),0 16px 26px rgba(0,0,0,.7)}
+.disco-v[aria-selected="true"] .aguja{transform:rotate(-10deg)}
+.disco-v:focus-visible{outline:none}.disco-v:focus-visible .vinilo{outline:2px solid var(--plata-2);outline-offset:4px}
+@media (max-width:640px){.fono{margin-bottom:0}.discos-v{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding-top:20px}.disco-v .plato{width:min(104px,100%)}.disco-v b{font-size:14px}}
+/* El Tintero: su casa */
+.tin-portada{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,5vw,64px);align-items:center;padding-block:10px 40px}
+.tin-portada .pantalla{aspect-ratio:1;max-width:460px;width:100%;justify-self:center;border-radius:50%;overflow:hidden;-webkit-mask:radial-gradient(closest-side,#000 80%,transparent);mask:radial-gradient(closest-side,#000 80%,transparent)}
+.tin-portada video{width:100%;height:100%;object-fit:cover;display:block}
+.tintero-txt{display:grid;gap:14px}
+.tintero-txt h2{margin:0;font:400 clamp(32px,4.6vw,52px)/1.05 var(--display);text-wrap:balance}
+.tintero-txt p{margin:0;color:var(--tinta-suave);max-width:46ch}
+.discos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(14px,3vw,36px);padding-block:20px 10px}
+.disco-t{position:relative;display:grid;justify-items:center;gap:12px;background:none;border:0;color:var(--tinta-suave);cursor:pointer;padding:0}
+.disco-t b{font:400 clamp(15px,1.6vw,19px)/1.1 var(--display)}
+.disco-t .vin{position:relative;display:grid;place-items:center;width:100%;max-width:170px;aspect-ratio:1;border-radius:50%;background:repeating-radial-gradient(circle,#0b0c0e 0 2px,#17191d 2px 3px);box-shadow:0 0 0 1px #24272c,0 14px 24px rgba(0,0,0,.6);transition:transform .5s ease,box-shadow .5s}
+.disco-t .vin::after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 30deg,transparent 0 40deg,rgba(255,255,255,.08) 55deg,transparent 70deg 220deg,rgba(255,255,255,.06) 235deg,transparent 250deg)}
+.disco-t .eti{position:relative;z-index:1;display:grid;place-items:center;width:34%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#c9a86a,#8d6c3c);color:#2b2010;font:400 clamp(14px,1.8vw,22px)/1 var(--display)}
+.disco-t::before{content:"";position:absolute;z-index:2;top:-6%;right:2%;width:46%;height:3px;border-radius:2px;background:linear-gradient(90deg,#9a7642,#ecd39c);transform-origin:100% 50%;transform:rotate(-38deg);opacity:0;transition:transform .9s cubic-bezier(.5,0,.2,1),opacity .4s}
+.disco-t[aria-selected="true"]{color:var(--tinta)}
+.disco-t[aria-selected="true"] .vin{animation:gira 1.8s linear infinite;box-shadow:0 0 0 1px #6d7279,0 0 30px rgba(220,224,230,.12),0 14px 24px rgba(0,0,0,.6)}
+.disco-t[aria-selected="true"]::before{opacity:1;transform:rotate(-14deg)}
+.disco-t:hover .vin{transform:translateY(-4px)}
+.programa{min-height:180px;margin-top:28px;padding:28px clamp(18px,4vw,40px);border-top:1px solid #1c1f24}
+.programa .quieto{margin:0;text-align:center;color:var(--plata-3);font:italic 400 18px/1.4 var(--display)}
+.programa h3{margin:0 0 6px;font:400 28px/1.1 var(--display)}
+.programa>p{margin:0 0 18px;color:var(--tinta-suave);max-width:60ch}
+.programa .vacio{color:var(--plata-3);font:500 11px/1.6 var(--mono);letter-spacing:.16em;text-transform:uppercase}
+.tintero-art{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:center;padding:16px 0;border-bottom:1px solid #1c1f24}
+.tintero-art img{width:84px;height:auto}
+.tintero-art b{display:block;font:400 21px/1.1 var(--display)}
+.tintero-art small{display:block;color:var(--tinta-suave);font-size:14px}
+.tintero-art a{display:inline-block;margin-top:6px;color:var(--tinta);font-size:14px}
+
+/* El Sello: el muro con sus puertas */
+.muro-sello{overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-top:12px}
+.muro-sello::-webkit-scrollbar{display:none}
+.muro-sello svg{display:block;height:min(74vh,calc(100vw * 640 / 1400));min-height:420px;width:auto;margin-inline:auto;overflow:visible}
+.l{fill:none;stroke:var(--plata-2);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1}
+.l.fina{stroke-width:1;stroke:var(--plata-3)}
+.pauta-alf{fill:none;stroke:var(--plata-2);stroke-width:1.3;stroke-linecap:round}
+.pauta-alf.fina{stroke:var(--plata-3);stroke-width:1}
+.rollo path,.rollo ellipse{fill:none;stroke:var(--plata-1);stroke-width:1.4}
+.rollo ellipse{fill:#08090b}
+.rollo.fuera{opacity:0;transition:opacity .5s ease}
+.pauta-alf.doble{stroke-width:1.8;stroke:var(--plata-1)}
+.nota-alf{opacity:0;transition:opacity .6s ease}.nota-alf.ya{opacity:1}
+.nota-alf ellipse{fill:var(--plata-2)}.nota-alf path{fill:none;stroke:var(--plata-2);stroke-width:1.2}
+/* la sala espera a la alfombra: nada se dibuja ni aparece hasta que termina */
+#muro-art svg > g{transition:opacity .8s ease}
+#muro-art .espera{opacity:0;transition:none}
+.vivo .l{animation:traza 1.6s cubic-bezier(.45,0,.2,1) forwards var(--d,0s)}
+@keyframes traza{to{stroke-dashoffset:0}}
+.surge{opacity:0;transition:opacity 1.2s ease var(--d,0s)}
+.vivo .surge{opacity:1}
+.placa-t{font:400 24px var(--display);fill:var(--tinta);text-anchor:middle}
+.escena-sello{position:relative;width:max-content;margin-inline:auto}
+.capa-plana{position:absolute;left:0;top:0;width:1400px;height:700px;transform-origin:0 0;pointer-events:none}
+.pizarra-plana{position:absolute;left:0;top:0;transform-origin:0 0;box-sizing:border-box;padding:22px 24px;border:2px solid #c8ccd2;outline:1px solid #6d7279;outline-offset:-12px;background:#08090b;cursor:pointer;pointer-events:auto;opacity:0;transition:opacity 1.2s ease 1.2s,border-color .4s}
+.vivo .pizarra-plana{opacity:1}
+.pizarra-plana:hover,.pizarra-plana:focus-visible{border-color:#f1f2f4;outline-color:#a9aeb5}
+.pz-t{margin:4px 0 16px 6px;font:500 13px/1 var(--mono);letter-spacing:.24em;text-transform:uppercase;color:var(--plata-3)}
+.pz-hojas{display:flex;gap:14px;align-items:flex-start;padding:0 14px 0 6px}
+.pz-hoja{position:relative;flex:1 1 0;min-width:0;display:grid;gap:7px;min-height:190px;align-content:start;padding:26px 12px 14px;border:1.5px solid #a9aeb5;transform:rotate(calc((var(--i) - 1) * 1.2deg)) translateY(calc(var(--i) * 8px))}
+.pz-hoja i{position:absolute;top:7px;left:50%;width:9px;height:9px;margin-left:-4.5px;border:1.5px solid #c8ccd2;border-radius:50%}
+.pz-hoja span{font:500 10.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--plata-3);white-space:nowrap}
+.pz-hoja b{font:400 21px/1.05 var(--display);color:var(--tinta)}
+.pz-hoja u{display:block;height:1px;background:#6d7279;width:88%}.pz-hoja u+u{width:70%}.pz-hoja u+u+u{width:52%}
+.ficha.solo-txt .ficha-img{display:none}
+.ficha.solo-txt .ficha-in{grid-template-columns:minmax(0,1fr)}
+.pizarra-lista{list-style:none;margin:6px 0 0;padding:0;display:grid}
+.pizarra-lista li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 18px;padding:14px 0;border-top:1px solid #1c1f24}
+.pizarra-lista b{font:400 22px/1.15 var(--display)}
+.pizarra-lista span{grid-column:1;color:var(--tinta-suave);font-size:14.5px}
+.pizarra-lista i{grid-column:2;grid-row:1/span 2;align-self:center;font:500 11px var(--mono);font-style:normal;letter-spacing:.16em;text-transform:uppercase;color:var(--plata-2)}
+.placa-s{font:500 11px var(--mono);letter-spacing:.2em;fill:var(--plata-3);text-anchor:middle;text-transform:uppercase}
+.frase-sello{font:italic 400 22px var(--display);fill:var(--plata-2);text-anchor:middle}
+.puerta{cursor:pointer;outline:none}
+.puerta .hoja{transform-box:fill-box;transform-origin:0 50%;transition:transform .9s cubic-bezier(.5,0,.2,1)}
+.puerta .rendija{fill:url(#luz-rendija);opacity:0;transition:opacity .5s ease}
+.puerta .tras{fill:#0b0c0e}
+.puerta:hover .rendija,.puerta:focus-visible .rendija{opacity:1}
+.puerta:focus-visible .marco{stroke:var(--plata-1)}
+.puerta.abre .hoja{transform:perspective(600px) rotateY(-70deg)}
+.puerta.abre .tras{fill:url(#luz-dentro)}
+.puerta.cerrada{cursor:default}
+.puerta.cerrada .placa-s{fill:#4a4e55}
+.lampara-luz{fill:url(#luz-lampara);opacity:0;transition:opacity 1.4s ease var(--d,0s)}
+.vivo .lampara-luz{opacity:1}
+.pista-muro{margin:6px 0 30px;text-align:center;font:500 10.5px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:#5d626a}
+.oficios{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;padding-bottom:60px}
+.sello .oficios h3{margin:0 0 6px;font:400 22px/1.15 var(--display)}
+.sello .oficios p{margin:0;color:var(--tinta-suave);font-size:15px}
+
+.muro-sello svg{height:min(74vh,calc(100vw * 700 / 1400))}
+.cuadro{cursor:pointer;outline:none}
+/* plano: cada logo se ve trazado; el original se pinta al pasar o al escogerlo */
+.pinta{opacity:0;transition:opacity .9s ease}
+.cuadro:hover .pinta,.cuadro:focus-visible .pinta,.cuadro.pintado .pinta,.logo-sello:hover .pinta,.relicario-l:hover .pinta{opacity:1}
+.relicario-l.abierto .pinta{animation:pinta-sale 1.1s forwards}
+@keyframes pinta-sale{0%,80%{opacity:1}100%{opacity:0}}
+.logo-sello{cursor:pointer;outline:none}
+.logo-sello:focus-visible .l{stroke:var(--plata-1)}
+
+.cuadro:focus-visible .l,.regreso:focus-visible .l{stroke:var(--plata-1)}
+.cuadro image{transition:transform .5s ease;transform-box:fill-box;transform-origin:50% 50%}
+.cuadro:hover image{transform:scale(1.05)}
+.cuadro.vacio{cursor:default}
+.volver-v{margin-left:14px;font:500 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--tinta);background:none;border:1px solid var(--plata-3);border-radius:999px;padding:9px 14px;cursor:pointer}
+.cuadro.vacio .placa-s{fill:#4a4e55}
+.regreso:hover .tras{fill:url(#luz-dentro)}
+/* Contacto: la carta */
+.escritorio{position:relative;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:clamp(24px,5vw,56px);align-items:start;padding-bottom:70px}
+.carta{grid-column:1;grid-row:1;position:relative;display:grid;gap:10px;padding:40px clamp(24px,4vw,52px) 32px;background:linear-gradient(180deg,rgba(230,231,233,.05),transparent 45%),#08090b;border:1.5px solid var(--plata-2);outline:1px solid #3a3e45;outline-offset:-12px;transform-origin:50% 0}
+.carta .motivos{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.carta .motivos input{position:absolute;opacity:0;pointer-events:none}
+.carta .motivos label{font:500 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--plata-3);border:1px solid #2a2d33;border-radius:999px;padding:9px 12px;cursor:pointer;background:#0d0e11}
+.carta .motivos input:checked+label{color:var(--noche);background:var(--plata-2);border-color:var(--plata-2)}
+.carta .motivos input:focus-visible+label{outline:2px solid var(--plata-2);outline-offset:3px}
+.saludo{margin:0;font:500 30px/44px var(--mano);color:var(--plata-1)}
+.renglon-c{display:grid;gap:0}
+.renglon-c span{font:500 9.5px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:#4f545b;padding-top:6px}
+.renglon-c input,.renglon-c textarea{width:100%;border:0;border-bottom:1px solid #23262c;background:transparent;color:var(--plata-1);font:500 26px/44px var(--mano);padding:0;outline:none;resize:none}
+.renglon-c textarea{min-height:177px;border-bottom:0;background:repeating-linear-gradient(180deg,transparent 0 43px,#23262c 43px 44px);background-attachment:local}
+.renglon-c input::placeholder,.renglon-c textarea::placeholder{color:#3d4147}
+.renglon-c:focus-within span{color:var(--plata-2)}
+.firma-c input{font-size:30px}
+.carta .enviar{justify-self:end;margin-top:18px;font:500 14px/1 var(--body);color:var(--tinta);background:#121418;border:1px solid var(--plata-3);border-radius:999px;padding:13px 22px;cursor:pointer}
+.carta .enviar:hover{border-color:var(--plata-1)}
+.carta .aviso{margin:6px 0 0;min-height:1.4em;color:#d9a3a3;font-size:14px;text-align:right}
+.trampa{position:absolute;left:-9999px}
+.sobre-escena{position:relative;padding-top:40px;width:100%;display:grid;place-items:center;pointer-events:none}
+.sobre{width:min(320px,80%);height:auto;fill:#101215;stroke:var(--plata-2);stroke-width:1.4}
+.lacre{position:absolute;top:calc(50% - 6px);left:50%;width:62px;height:62px;margin:-31px 0 0 -31px;border-radius:47% 53% 50% 48%;background:radial-gradient(circle at 38% 35%,#cfd3d8,#8b9098 55%,#5a5f66);box-shadow:0 4px 10px rgba(0,0,0,.6),inset 0 -3px 6px rgba(0,0,0,.35);display:grid;place-items:center;opacity:0}
+.lacre img{display:block;height:40px;width:auto;max-width:none;filter:brightness(.25)}
+.llego{grid-column:1;display:grid;gap:10px;justify-items:start;padding:60px 0}
+.llego h3{margin:0;font:400 clamp(28px,4vw,40px)/1.1 var(--display)}
+.llego p{margin:0;color:var(--tinta-suave)}
+.otra{margin-top:10px;font:500 13px/1 var(--body);color:var(--tinta);background:none;border:1px solid var(--plata-3);border-radius:999px;padding:11px 18px;cursor:pointer}
+.directo{grid-column:2;grid-row:1;display:grid;gap:14px;align-self:start;margin-top:0;padding:26px 24px;border:1.5px solid var(--plata-2);outline:1px solid #3a3e45;outline-offset:-10px;position:relative}
+.techo-c,.piso-c{display:block;width:100%;height:40px;overflow:visible}
+.techo-c path,.piso-c path{vector-effect:non-scaling-stroke}
+.piso-c{height:110px;margin-top:-40px}
+.lampara-c{position:absolute;left:50%;top:-74px;width:96px;height:56px;margin-left:-48px;overflow:visible;pointer-events:none}
+
+.contacto .escritorio{padding-top:60px}
+.contacto.vivo .carta,.contacto.vivo .directo{animation:sube-c .9s ease both}
+@keyframes sube-c{from{opacity:0;transform:translateY(10px)}}
+.sobre-escena,.llego{grid-column:1;grid-row:1}
+.prueba-nota{position:fixed;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:40;margin:0;font:500 9.5px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:#3b3f45;pointer-events:none}
+@media (max-width:760px){
+  .directo .lampara-c{display:none}
+  .tin-portada,.escritorio{grid-template-columns:1fr}
+  .tin-portada .pantalla{max-width:300px}
+  .discos{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sello .oficios{grid-template-columns:1fr;gap:18px}
+  .muro-sello svg{height:440px;min-height:0}
+  .sobre-escena{width:100%}
+  .directo,.carta,.llego{grid-column:auto;grid-row:auto}
+  .prueba-nota{display:none}
+}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none !important;transition:none !important}}
 </style>
-</head>
-<body>
+
 <div class="entrada" id="entrada">
-  <button class="disco" id="disco" type="button" aria-label="Entrar a Tinta y Ritmo"><img src="logo.png" alt="Logo de Tinta y Ritmo: un vinilo con una pluma y un pentagrama"></button>
+  <button class="disco" id="disco" type="button" aria-label="Entrar a Tinta y Ritmo"><img src="logo_capas.webp" alt="Logo de Tinta y Ritmo: un vinilo con una pluma y un pentagrama"></button>
   <p class="invita" aria-hidden="true">Toca el disco</p>
 </div>
 
 <div id="pagina" class="pre">
   <header class="barra">
     <div class="wrap">
-      <a class="marca" href="#inicio"><img src="logo.png" alt="">Tinta y Ritmo</a>
+      <a class="marca" href="#inicio"><img src="logo.webp" alt="">Tinta y Ritmo</a>
       <nav class="secciones" aria-label="Secciones">
         <a href="#artefactos" data-v="artefactos">Artefactos</a>
-        <a href="#artistas" data-v="artistas">Artistas</a>
         <a href="#tintero" data-v="tintero">El Tintero</a>
-        <a href="#lanzamientos" data-v="lanzamientos">Lanzamientos</a>
         <a href="#sello" data-v="sello">El Sello</a>
         <a href="#contacto" data-v="contacto">Contacto</a>
       </nav>
     </div>
   </header>
 
-  <main class="inicio" id="v-inicio">
+  <main class="inicio solo4" id="v-inicio">
     <div class="wrap">
       <div class="clave-titulo">
         <svg class="clave" id="clave" viewBox="0 0 120 250" aria-hidden="true">
@@ -337,7 +719,15 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
         </svg>
         <div class="renglon">
           <div class="lineas" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-          <h1>Tinta <em>y</em> Ritmo</h1>
+          <h1 class="hueco">Tinta <em>y</em> Ritmo</h1>
+          <p class="titulo-partitura" aria-hidden="true">TINTA Y RITMO</p>
+          <nav class="notas" aria-label="Secciones">
+            <a class="nota" href="#artefactos" style="--n:0" data-dice="Las piezas que guardan cada universo.">Artefactos</a>
+            <a class="nota" href="#tintero" style="--n:1" data-dice="Donde la tinta suena: canciones, sesiones y Tinteros.">El Tintero</a>
+            <a class="nota" href="#sello" style="--n:2" data-dice="Quiénes somos y las casas que trabajan con nosotros.">El Sello</a>
+            <a class="nota" href="#contacto" style="--n:3" data-dice="Escríbenos una carta.">Contacto</a>
+          </nav>
+          <p class="letrero" id="letrero" aria-live="polite">Escoge por dónde entrar</p>
           <div class="gotas-vivas" aria-hidden="true">
             <i style="right:-3%;top:4%;animation-delay:0s"></i>
             <i style="right:-6%;top:30%;animation-delay:.83s"></i>
@@ -350,168 +740,101 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
   </main>
 
   <main class="artefactos" id="v-artefactos" hidden>
-    <div class="wrap">
-      <header class="sala-cab">
-        <p class="ceja">Artefactos</p>
-        <h2>Cada obra guarda su mundo en un objeto.</h2>
-        <p>Toca un artefacto para ver qué es, de quién es y qué ha salido de él.</p>
-      </header>
-      <div class="vitrina">
-        <button class="pieza" type="button" data-a="grimorio" style="--luz:var(--luz-grimorio);--d:.1s;--f:0s">
-          <span class="haz"></span><span class="foco"></span><span class="charco"></span>
-          <span class="polvo" aria-hidden="true"><i style="--x:44%;--t:0s"></i><i style="--x:56%;--t:2.3s"></i><i style="--x:50%;--t:4.1s"></i><i style="--x:38%;--t:5.6s"></i></span>
-          <span class="objeto"><img src="grimorio.png" alt="El grimorio: libro de cuero viejo con la cara de un demonio en latón"></span>
-          <span class="placa"><b>Demonio de la Tinta</b><small>Di•eM · grimorio</small></span>
-        </button>
-        <button class="pieza" type="button" data-a="proximo" style="--luz:var(--luz-proximo);--d:.6s;--f:-3s">
-          <span class="haz" style="opacity:.22"></span><span class="foco"></span><span class="charco" style="opacity:.3"></span>
-          <span class="objeto"><span class="velo" aria-hidden="true">?</span></span>
-          <span class="placa"><b>Próximo</b><small>Sin nombre todavía</small></span>
-        </button>
-      </div>
-    </div>
-  </main>
-
-  <main class="artefactos" id="v-artistas" hidden>
-    <div class="wrap">
-      <header class="sala-cab">
-        <p class="ceja">Artistas</p>
-        <h2>Quienes escriben los universos.</h2>
-        <p>Toca a un artista para conocer su historia, sus artefactos y dónde escucharlo.</p>
-      </header>
-      <div class="vitrina">
-        <button class="pieza" type="button" data-a="diem" style="--luz:var(--luz-diem);--d:.1s;--f:0s">
-          <span class="haz"></span><span class="foco"></span><span class="charco"></span>
-          <span class="polvo" aria-hidden="true"><i style="--x:44%;--t:0s"></i><i style="--x:56%;--t:2.3s"></i><i style="--x:50%;--t:4.1s"></i></span>
-          <span class="objeto"><img src="diem.png" alt="Logo de Di•eM con una pluma fuente"></span>
-          <span class="placa"><b>Di•eM</b><small>Poeta · MC</small></span>
-        </button>
-        <a class="pieza libre" href="#contacto" style="--luz:var(--luz-proximo);--d:.6s;--f:-3s">
-          <span class="haz" style="opacity:.18"></span><span class="foco"></span><span class="charco" style="opacity:.25"></span>
-          <span class="objeto"><span class="marco-vacio">Este lugar<br>está libre</span></span>
-          <span class="placa"><b>Tu universo aquí</b><small>Escríbenos</small></span>
-        </a>
-      </div>
-    </div>
+    <div class="muro-sello muro-art" id="muro-art"></div>
+    <p class="frase-sala">Cada historia deja un objeto. Aquí se guardan.</p>
+    <p class="pista-muro">Toca el relicario para abrirlo</p>
   </main>
 
   <main class="tintero" id="v-tintero" hidden>
-    <div class="wrap">
-      <div class="portada">
-        <div class="pantalla"><video id="tintero-video" src="tintero.mp4" poster="tintero.jpg" muted playsinline preload="auto" aria-label="El Tintero: cae una gota al tintero y la pluma toca el disco"></video></div>
-        <div class="tintero-txt">
-          <p class="ceja">El Tintero · Programa del sello</p>
-          <h2>Cyphers, slams y sesiones en vivo.</h2>
-          <p>El Tintero es el programa abierto de Tinta y Ritmo: cyphers, slams y lives donde los artistas escriben en voz alta. Aquí se guarda cada sesión.</p>
-          <p>Cada artista del sello puede tener su propio Tintero, ligado a su universo, si así lo quiere.</p>
-        </div>
-      </div>
-
-      <div class="sesiones-cab"><h3>Sesiones</h3><a class="ceja" href="https://www.youtube.com/@TintayRitmoOficial" target="_blank" rel="noopener" style="text-decoration:none">Canal de YouTube ↗</a></div>
-      <div id="sesiones"></div>
-
-      <div class="otros-tinteros">
-        <div>
-          <p class="ceja">Tintero de Di•eM</p>
-          <h3>Demonio de la Tinta</h3>
-          <p>Las lecturas y las sesiones de las canciones del grimorio viven en su propio sitio.</p>
-          <a class="entrar" href="https://demoniodelatinta.com" target="_blank" rel="noopener">Ir al grimorio <span aria-hidden="true">↗</span></a>
-        </div>
-        <div>
-          <p class="ceja">Participa</p>
-          <h3>¿Quieres subir a un cypher o a un slam?</h3>
-          <p>Escríbenos con tu nombre y una muestra de lo que haces.</p>
-          <a class="entrar" href="#contacto">Ir a Contacto</a>
-        </div>
+    <div class="muro-sello" id="muro-tin">
+      <div class="lienzo-tin" id="lienzo-tin">
+        <video class="tin-fuente" id="tintero-video" src="tintero_escena.mp4" poster="tintero_escena.jpg" muted playsinline preload="auto" aria-hidden="true"></video>
+        <canvas class="tin-video" id="tin-luz" role="img" aria-label="El logo de El Tintero, trazado; al pasar se ve el original"></canvas>
       </div>
     </div>
-  </main>
-
-  <main class="lanzamientos" id="v-lanzamientos" hidden>
     <div class="wrap">
-      <header class="sala-cab">
-        <p class="ceja">Lanzamientos</p>
-        <h2>Todo lo que sale, en el orden en que sale.</h2>
-        <p>Canciones, capítulos, lecturas y sesiones de todos los artefactos del sello quedan grabados aquí, del más nuevo al primero.</p>
-      </header>
-      <div class="surco" id="surco"></div>
+      <div class="fono" id="fono" aria-hidden="true">
+        <img class="fono-base" src="fono_base_c.webp" alt="">
+        <div class="fono-plato" id="fono-plato"></div>
+        <img class="fono-pluma" src="fono_brazo_c.webp" alt="">
+      </div>
+      <div class="discos-v" role="tablist" aria-label="Programas de El Tintero">
+        <button class="disco-v" role="tab" type="button" data-p="canciones" aria-selected="false"><span class="plato"><span class="vinilo"><span class="etq"></span></span></span><b>Canciones</b></button>
+        <button class="disco-v" role="tab" type="button" data-p="sesiones" aria-selected="false"><span class="plato"><span class="vinilo"><span class="etq"></span></span></span><b>Sesiones</b></button>
+        <button class="disco-v" role="tab" type="button" data-p="artistas" aria-selected="false"><span class="plato"><span class="vinilo"><span class="etq"></span></span></span><b>Tinteros de artistas</b></button>
+      </div>
+    </div>
+    <p class="pista-muro">Toca un disco: va al tocadiscos y suena su programa</p>
+    <div class="wrap">
+      <section class="programa" id="programa" role="tabpanel" aria-live="polite">
+        <p class="quieto">Aquí la tinta se vuelve voz. Escoge un disco.</p>
+      </section>
     </div>
   </main>
 
   <main class="sello" id="v-sello" hidden>
+    <div class="muro-sello" id="muro-sello"></div>
     <div class="wrap">
-      <header class="sello-cab">
-        <p class="ceja">El Sello</p>
-        <h2>Una casa para que cada artista cree su universo a su manera.</h2>
-        <p>Tinta y Ritmo es sello, casa transmedia y management. Aquí una obra no sale sola: sale con su mundo, su libro, su música y su imagen. Hoy la casa es de Di•eM, y la puerta está abierta para quien quiera construir el suyo.</p>
-      </header>
-
+      <p class="pista-muro"><span id="pista-muro">Toca una puerta para entrar a cada área</span> <button type="button" class="volver-v" id="volver-v" hidden>← Vestíbulo</button></p>
+      <section class="nosotros" id="nosotros">
+      <p class="presenta">Tinta y Ritmo nació en 2025, entre una libreta y un micrófono. Somos una casa que va empezando: te damos el espacio para darle voz y dirección a lo que quieres decir. Aquí se hace arte con lo que uno es.</p>
       <div class="oficios">
-        <div><h3>Sello</h3><p>Publicamos y cuidamos cada lanzamiento, de la primera hoja al disco completo.</p></div>
-        <div><h3>Casa transmedia</h3><p>Cada obra tiene su artefacto y su mundo: libro, canciones, video y escenario contando la misma historia.</p></div>
-        <div><h3>Management</h3><p>Acompañamos la carrera del artista: presentaciones, alianzas y el camino de su universo.</p></div>
+        <div><h3>Sello</h3><p>Acompañamos tu obra desde la primera hoja hasta que suena.</p></div>
+        <div><h3>Casa transmedia</h3><p>Una canción puede ser historia, libro, video o escenario. Buscamos juntos la forma que le toca a la tuya.</p></div>
+        <div><h3>Management</h3><p>Caminamos contigo: presentaciones, encuentros y el rumbo de tu universo, sin que dejes de ser quien eres.</p></div>
       </div>
-
-      <p class="ceja casas-cab">Las casas</p>
-      <div class="casas">
-        <div class="casa" style="--luz:var(--plata-2)">
-          <img src="casa_tyr.png" alt="Logo de Tinta y Ritmo: vinilo con pluma y pentagrama">
-          <div><b>Tinta y Ritmo</b><small>Sello · Management</small><p>La casa madre, donde nace cada universo.</p></div>
-        </div>
-        <div class="casa" style="--luz:#7d8a96">
-          <img src="casa_garabatos.png" alt="Logo de Garabatos Records: micrófono y pluma en un medallón">
-          <div><b>Garabatos Records</b><small>Audio · Producción</small><p>Donde la música toma forma.</p></div>
-        </div>
-        <div class="casa" style="--luz:#e8dcc2">
-          <img src="casa_butaca.png" alt="Logo de Butaca Cero: una butaca vacía bajo un reflector dentro de un cero">
-          <div><b>Butaca Cero</b><small>Imagen · Cine</small><p>Más cerca que la primera fila.</p></div>
-        </div>
-      </div>
-
-      <div class="puerta">
-        <p class="ceja">Para artistas</p>
-        <h3>¿Tienes un universo por contar?</h3>
-        <p>Escríbenos y cuéntanos de tu obra.</p>
-        <span class="correo">tintayritmo.oficial@gmail.com</span>
-        <a class="entrar" href="#contacto">Ir a Contacto</a>
-      </div>
+      </section>
     </div>
   </main>
 
   <main class="contacto" id="v-contacto" hidden>
-    <div class="wrap rejilla">
-      <header class="contacto-cab">
+    <div class="wrap">
+      <header class="sala-cab centro">
         <p class="ceja">Contacto</p>
         <h2>Escríbenos.</h2>
-        <p>Para booking, prensa, alianzas o si eres artista y quieres crear tu universo con nosotros. También puedes pedirnos información sobre cualquier obra del sello.</p>
-        <div class="correo-grande"><span id="correo-sello">tintayritmo.oficial@gmail.com</span><button class="copiar" type="button" id="copiar">Copiar</button></div>
-        <nav class="redes-c" aria-label="Redes del sello">
-          <a href="https://www.instagram.com/tintayritmooficial/" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://www.facebook.com/profile.php?id=61580810854516" target="_blank" rel="noopener">Facebook</a>
-          <a href="https://www.youtube.com/@TintayRitmoOficial" target="_blank" rel="noopener">YouTube</a>
-        </nav>
+        <p>Para booking, información o solo para saludar. Si eres artista y tienes algo que decir, cuéntanos de qué se trata.</p>
       </header>
-
-      <form class="forma" id="forma" novalidate>
-        <div class="campo">
-          <label id="motivo-t">Quiero</label>
-          <div class="motivos" role="radiogroup" aria-labelledby="motivo-t">
+<svg class="techo-c" viewBox="0 0 1400 40" preserveAspectRatio="none" aria-hidden="true"><path class="l fina" pathLength="1" d="M0 8 H1400"/><path class="l fina" pathLength="1" style="--d:.1s" d="M0 24 H1400"/></svg>
+      <div class="escritorio">
+        <form class="carta" id="forma" novalidate>
+          <svg class="lampara-c" viewBox="0 0 120 70" aria-hidden="true"><path class="l fina" pathLength="1" style="--d:.4s" d="M60 0 V30"/><path class="l" pathLength="1" style="--d:.55s" d="M42 52 Q42 30 60 30 Q78 30 78 52 Z"/><path class="l fina" pathLength="1" style="--d:.7s" d="M52 52 h16"/></svg>
+          <div class="motivos" role="radiogroup" aria-label="Motivo">
             <input type="radio" name="motivo" id="m1" value="Pedir información" checked><label for="m1">Pedir información</label>
             <input type="radio" name="motivo" id="m2" value="Mandar información"><label for="m2">Mandar información</label>
             <input type="radio" name="motivo" id="m3" value="Booking"><label for="m3">Booking</label>
             <input type="radio" name="motivo" id="m4" value="Soy artista"><label for="m4">Soy artista</label>
           </div>
+          <p class="saludo">Tinta y Ritmo:</p>
+          <label class="renglon-c" for="f-mensaje"><span>Mensaje</span><textarea id="f-mensaje" name="mensaje" rows="5" required placeholder="Escribe aquí…"></textarea></label>
+          <label class="renglon-c" for="f-enlace"><span>Un enlace, si quieres</span><input id="f-enlace" name="enlace" type="url" placeholder="Tu música, video o carpeta"></label>
+          <label class="renglon-c firma-c" for="f-nombre"><span>Firma</span><input id="f-nombre" name="nombre" autocomplete="name" required placeholder="Tu nombre"></label>
+          <label class="renglon-c" for="f-correo"><span>Para responderte</span><input id="f-correo" name="email" type="email" autocomplete="email" required placeholder="tu@correo.com"></label>
+          <input class="trampa" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button class="enviar" type="submit" id="enviar">Sellar y enviar</button>
+          <p class="aviso" id="aviso" role="status"></p>
+        </form>
+        <div class="sobre-escena" id="sobre" hidden aria-hidden="true">
+          <svg class="sobre" viewBox="0 0 320 210"><rect x="1" y="1" width="318" height="208" rx="3"/><path d="M1 1 L160 120 L319 1"/><path d="M1 209 L128 96 M319 209 L192 96"/></svg>
+          <span class="lacre"><img src="clave.png" alt=""></span>
         </div>
-        <div class="par">
-          <div class="campo"><label for="f-nombre">Nombre</label><input id="f-nombre" name="nombre" autocomplete="name" required></div>
-          <div class="campo"><label for="f-correo">Tu correo</label><input id="f-correo" name="email" type="email" autocomplete="email" required></div>
+        <div class="llego" id="llego" hidden>
+          <p class="ceja">Enviada</p>
+          <h3>Tu carta llegó. La leemos y te respondemos desde el correo del sello.</h3>
+          <p>Te respondemos a tu correo.</p>
+          <button class="otra" type="button" id="otra">Escribir otra carta</button>
         </div>
-        <div class="campo"><label for="f-enlace">Enlace (opcional)</label><input id="f-enlace" name="enlace" type="url" placeholder="Tu música, video o carpeta"></div>
-        <div class="campo"><label for="f-mensaje">Mensaje</label><textarea id="f-mensaje" name="mensaje" required></textarea></div>
-        <input class="trampa" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <button class="enviar" type="submit" id="enviar">Enviar</button>
-        <p class="aviso" id="aviso" role="status"></p>
-      </form>
+        <aside class="directo">
+          <svg class="lampara-c" viewBox="0 0 120 70" aria-hidden="true"><path class="l fina" pathLength="1" style="--d:.6s" d="M60 0 V30"/><path class="l" pathLength="1" style="--d:.75s" d="M42 52 Q42 30 60 30 Q78 30 78 52 Z"/><path class="l fina" pathLength="1" style="--d:.9s" d="M52 52 h16"/></svg>
+          <p class="ceja">O directo</p>
+          <div class="correo-grande"><span id="correo-sello">tintayritmo.oficial@gmail.com</span><button class="copiar" type="button" id="copiar">Copiar</button></div>
+          <nav class="redes-c" aria-label="Redes del sello">
+            <a href="https://www.instagram.com/tintayritmooficial/" target="_blank" rel="noopener">Instagram</a>
+            <a href="https://www.facebook.com/profile.php?id=61580810854516" target="_blank" rel="noopener">Facebook</a>
+            <a href="https://www.youtube.com/@TintayRitmoOficial" target="_blank" rel="noopener">YouTube</a>
+          </nav>
+        </aside>
+      </div>
+      <svg class="piso-c" viewBox="0 0 1400 130" preserveAspectRatio="none" aria-hidden="true"><path class="l" pathLength="1" style="--d:.2s" d="M0 2 H1400"/><path class="l fina" pathLength="1" style="--d:.3s" d="M0 18 H1400"/><path class="l fina" pathLength="1" style="--d:.4s" d="M140 18 L-70 130 M420 18 L280 130 M700 18 V130 M980 18 L1120 130 M1260 18 L1470 130"/></svg>
     </div>
   </main>
 
@@ -533,23 +856,83 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
       <div class="ficha-txt" id="ficha-txt"></div>
     </div>
   </dialog>
+  <dialog class="revelacion" id="revelacion" aria-label="Reliquia N.º I">
+    <button class="cerrar" type="button" id="cerrar-rev">Cerrar</button>
+    <div class="rev-in solo">
+      <div class="rev-escena">
+        <span class="rev-luz" aria-hidden="true"></span>
+        <img class="rev-libro" id="rev-libro" src="grimorio.webp" alt="El grimorio de Demonio de la Tinta">
+        <ol class="fragmentos" id="fragmentos" aria-label="Hojas selladas"></ol>
+      </div>
+      <div class="rev-pie">
+        <p class="ceja">N.º I</p>
+        <p class="cifra-h">⩗ ∴ ᗰ ◇ N | ◇    ⩗ ∴    |_ △    ⊥ | N ⊥ △</p>
+        <a class="entrar" href="https://demoniodelatinta.com" target="_blank" rel="noopener">Abrir el grimorio <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </dialog>
 </div>
 
 <script>
 (function(){
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   var entrada=document.getElementById('entrada'),disco=document.getElementById('disco'),pagina=document.getElementById('pagina'),destino=document.getElementById('viniloClave');
-  var hecho=false;
+  var hecho=false,molde=entrada.cloneNode(true);
+  // el pentagrama del logo se desprende del vinilo, se endereza y cae en las cinco líneas de la entrada
+  // centro del pentagrama del logo, en coordenadas de su capa (penta_capa: x .14 a .868, y .5217 a .865 del logo)
+  var CURVA=[[0,392],[120,343],[240,392],[380,466],[520,461],[660,391],[800,286],[940,242],[1080,197],[1170,110]];
+  var PASO=[[0,24],[400,30],[800,43],[1179,50]];
+  function interp(t,x){for(var i=1;i<t.length;i++)if(x<=t[i][0]){var f=(x-t[i-1][0])/(t[i][0]-t[i-1][0]);return t[i-1][1]+f*(t[i][1]-t[i-1][1])}return t[t.length-1][1]}
+  function curvaY(x){ // Catmull-Rom sobre CURVA
+    for(var i=0;i<CURVA.length-1;i++)if(x<=CURVA[i+1][0]){
+      var p0=CURVA[Math.max(0,i-1)],p1=CURVA[i],p2=CURVA[i+1],p3=CURVA[Math.min(CURVA.length-1,i+2)],t=(x-p1[0])/(p2[0]-p1[0]),t2=t*t,t3=t2*t;
+      return .5*((2*p1[1])+(-p0[1]+p2[1])*t+(2*p0[1]-5*p1[1]+4*p2[1]-p3[1])*t2+(-p0[1]+3*p1[1]-3*p2[1]+p3[1])*t3);
+    }return CURVA[CURVA.length-1][1];
+  }
+  function pentagramaSale(a,ang){
+    if(reduce)return;
+    // el vinilo venía girando: el pentagrama sale del ángulo en que estaba
+    var ca=Math.cos(ang*Math.PI/180),sa=Math.sin(ang*Math.PI/180),gx=a.left+.49*a.width,gy=a.top+.5*a.height;
+    function rota(p){var x=p[0]-gx,y=p[1]-gy;return[gx+x*ca-y*sa,gy+x*sa+y*ca]}
+    var N=48,lineas=document.querySelector('#v-inicio .lineas'),hijos=lineas.querySelectorAll('i'),R=lineas.getBoundingClientRect();
+    var destino=[].map.call(hijos,function(i){var r=i.getBoundingClientRect();return r.top+r.height/2});
+    var X0=a.left+.14*a.width,AW=.7278*a.width,Y0=a.top+.5217*a.height,AH=.3432*a.height;
+    var origen=[];for(var j=0;j<5;j++){origen.push([]);for(var k=0;k<N;k++){var x=k/(N-1)*1179,y=curvaY(x)+(j-2)*interp(PASO,x)*.9;origen[j].push(rota([X0+x/1179*AW,Y0+y/522*AH]))}}
+    // la capa del pentagrama, idéntica a la del logo, se apaga mientras las líneas plateadas toman su lugar
+    var capa=document.createElement('div');capa.className='viajero';capa.style.cssText='left:'+a.left+'px;top:'+a.top+'px;width:'+a.width+'px;z-index:62';
+    capa.innerHTML='<img src="penta_capa.webp" alt="" style="animation:none;transform:rotate('+ang+'deg)">';document.body.appendChild(capa);
+    capa.animate([{opacity:1},{opacity:0}],{duration:420,delay:120,fill:'forwards'});
+    var NS='http://www.w3.org/2000/svg',svg=document.createElementNS(NS,'svg');svg.setAttribute('class','pentagrama-vuela');
+    var paths=[];for(var j=0;j<5;j++){var pa=document.createElementNS(NS,'path');svg.appendChild(pa);paths.push(pa)}
+    document.body.appendChild(svg);
+    var t0=performance.now(),DUR=1500,RET=150;
+    function cuadro(now){
+      var t=Math.min(1,Math.max(0,(now-t0-RET)/DUR)),e=t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2,alza=Math.sin(Math.PI*e)*-50;
+      for(var j=0;j<5;j++){var d='';for(var k=0;k<N;k++){var o=origen[j][k],dx=R.left+k/(N-1)*R.width,dy=destino[j];
+        var x=o[0]+(dx-o[0])*e,y=o[1]+(dy-o[1])*e+alza*(1-Math.abs(k/(N-1)-.5));d+=(k?' L':'M')+x.toFixed(1)+' '+y.toFixed(1)}
+        paths[j].setAttribute('d',d)}
+      var c=function(a,b){return Math.round(a+(b-a)*Math.max(0,(e-.7)/.3))};
+      svg.style.stroke='rgb('+c(200,42)+','+c(204,45)+','+c(210,51)+')';
+      svg.style.opacity=Math.min(1,(now-t0)/260);
+      if(t<1)requestAnimationFrame(cuadro);
+      else{pagina.classList.add('lineas-ya');pagina.classList.remove('sin-lineas');svg.remove();capa.remove()}
+    }
+    requestAnimationFrame(cuadro);
+  }
   function terminar(){pagina.classList.remove('pre');document.body.classList.add('listo');entrada.remove()}
-  disco.addEventListener('click',function(){
+  function tocar(){
     if(hecho)return;hecho=true;
     if(reduce){terminar();return}
     disco.classList.add('acelera');
     // el vinilo viaja hasta el cuerpo de la clave
     var r=disco.getBoundingClientRect(),im=disco.querySelector('img'),b=destino.getBoundingClientRect();
     var a={left:r.left+im.offsetLeft,top:r.top+im.offsetTop,width:im.offsetWidth,height:im.offsetHeight};
+    // ángulo exacto del giro al momento del toque
+    var m=getComputedStyle(im).transform,ang=0;if(m&&m!=='none'){var q=m.match(/matrix\(([^)]+)\)/);if(q){var n=q[1].split(',').map(parseFloat);ang=Math.atan2(n[1],n[0])*180/Math.PI}}
+    if(ang<0)ang+=360;
     var v=document.createElement('div');v.className='viajero';v.style.left=a.left+'px';v.style.top=a.top+'px';v.style.width=a.width+'px';
-    v.innerHTML='<img src="logo.png" alt="">';document.body.appendChild(v);
+    v.innerHTML='<img src="logo_sin_penta.webp" alt="" style="animation-delay:'+(-ang/360*.5)+'s">';document.body.appendChild(v);
+    pentagramaSale(a,ang);
     disco.style.visibility='hidden';
     // el centro del logo está un poco a la derecha (49%)
     var s=b.width/(a.width*.82),dx=(b.left+b.width/2)-(a.left+a.width*.49*s)-0,dy=(b.top+b.height/2)-(a.top+a.height*.5*s);
@@ -557,106 +940,596 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
     v.animate([{transform:'translate(0,0) scale(1)'},{transform:'translate('+dx+'px,'+dy+'px) scale('+s+')'}],{duration:1100,easing:'cubic-bezier(.7,0,.25,1)',fill:'forwards'});
     entrada.classList.add('cerrando');
     setTimeout(function(){
-      pagina.classList.remove('pre');document.body.classList.add('listo');
+      pagina.classList.add('sin-lineas');pagina.classList.remove('pre');document.body.classList.add('listo');
       v.animate([{opacity:1},{opacity:0}],{duration:280,fill:'forwards'});
       setTimeout(function(){v.remove();entrada.remove()},300);
     },1050);
+  }
+  disco.addEventListener('click',tocar);
+  // el vinilo que gira en la barra regresa a la intro
+  destino.addEventListener('click',function(e){
+    e.preventDefault();e.stopPropagation();
+    if(document.getElementById('entrada'))return;
+    var ya=(location.hash||'#inicio')==='#inicio';
+    if(!ya)location.hash='#inicio';
+    setTimeout(function(){
+      entrada=molde.cloneNode(true);disco=entrada.querySelector('#disco');
+      document.body.insertBefore(entrada,pagina);
+      pagina.classList.remove('lineas-ya','sin-lineas');pagina.classList.add('pre');document.body.classList.remove('listo');
+      window.scrollTo(0,0);hecho=false;disco.addEventListener('click',tocar);
+    },ya?0:60);
   });
 })();
 </script>
 
 <script>
 (function(){
-  // ── Secciones (Inicio / Artefactos) ──
-  var vistas={inicio:document.getElementById('v-inicio'),artefactos:document.getElementById('v-artefactos'),sello:document.getElementById('v-sello'),contacto:document.getElementById('v-contacto'),artistas:document.getElementById('v-artistas'),tintero:document.getElementById('v-tintero'),lanzamientos:document.getElementById('v-lanzamientos')};
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // ── Secciones ──
+  var vistas={inicio:document.getElementById('v-inicio'),artefactos:document.getElementById('v-artefactos'),tintero:document.getElementById('v-tintero'),sello:document.getElementById('v-sello'),contacto:document.getElementById('v-contacto')};
   function ir(){
     var v=(location.hash||'#inicio').slice(1);if(!vistas[v])v='inicio';
     for(var k in vistas)vistas[k].hidden=(k!==v);
     document.querySelectorAll('.secciones a').forEach(function(a){if(a.dataset.v===v)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
     if(v!=='inicio'){var e=document.getElementById('entrada');if(e){e.remove();var p=document.getElementById('pagina');p.classList.remove('pre');document.body.classList.add('listo')}}
     window.scrollTo(0,0);
+    if(v==='artefactos')salaVista.inicio();
+    if(v==='tintero')tinteroVista.inicio();else luz.alto();
     var tv=document.getElementById('tintero-video');
-    if(tv){if(v==='tintero'&&!matchMedia('(prefers-reduced-motion: reduce)').matches){try{tv.currentTime=0;var p=tv.play();if(p&&p.catch)p.catch(function(){})}catch(e){}}else{try{tv.pause()}catch(e){}}}
+    if(tv){if(v==='tintero'&&!reduce){try{tv.currentTime=0;var pr=tv.play();if(pr&&pr.catch)pr.catch(function(){})}catch(e){}}else{try{tv.pause()}catch(e){}}}
+    if(v==='sello')selloVista.inicio();
+    var vc=vistas.contacto;vc.classList.remove('vivo');if(v==='contacto'){void vc.offsetWidth;vc.classList.add('vivo')}
   }
-  addEventListener('hashchange',ir);ir();
-  document.querySelectorAll('.secciones a.aun').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault()})});
+  addEventListener('hashchange',ir);
 
-  // ── Fichas ──
-  var FICHAS={
-    grimorio:function(){return{luz:'var(--luz-grimorio)',img:'<img src="grimorio.png" alt="">',txt:
-      '<p class="ceja">Artefacto · Di•eM</p><h3 id="ficha-t">Demonio de la Tinta</h3>'+
-      '<p>Un grimorio que se escribe con canciones. Cada capítulo se abre completo el día 13, con su prosa, su canción y su Lado B, abierto para todos.</p>'+
-      '<dl class="datos"><dt>Artista</dt><dd>Di•eM</dd><dt>Forma</dt><dd>Libro, álbum y relatos</dd><dt>Ha salido</dt><dd>El grimorio sigue sellado</dd></dl>'+
-      '<a class="entrar" href="https://demoniodelatinta.com" target="_blank" rel="noopener">Entrar al grimorio <span aria-hidden="true">↗</span></a>'}},
-    diem:function(){return{luz:'var(--luz-diem)',img:'<img class="diem-img" src="diem.png" alt="">',txt:
-      '<p class="ceja">Artista · Tinta y Ritmo</p><h3 id="ficha-t">Di•eM</h3>'+
-      '<p>Poeta y MC. Escribe desde 2009 y graba desde 2011, entre el boom bap y el R&amp;B. En 2025 volvió al slam y fundó Tinta y Ritmo para contar sus canciones como universos. Hoy escribe Demonio de la Tinta, un grimorio donde cada capítulo es una canción.</p>'+
-      '<dl class="datos"><dt>Artefactos</dt><dd><a href="https://demoniodelatinta.com" target="_blank" rel="noopener" style="color:inherit">Demonio de la Tinta ↗</a></dd></dl>'+
-      '<nav class="redes-f" aria-label="Redes de Di•eM"><a href="https://open.spotify.com/intl-es/artist/7glwFUToqcYzxmNULOf38D" target="_blank" rel="noopener">Spotify</a><a href="https://www.youtube.com/@di.emoficial" target="_blank" rel="noopener">YouTube</a><a href="https://www.instagram.com/di.emoficial" target="_blank" rel="noopener">Instagram</a><a href="https://www.tiktok.com/@di_em0607" target="_blank" rel="noopener">TikTok</a><a href="https://www.facebook.com/profile.php?id=61589251875874" target="_blank" rel="noopener">Facebook</a></nav>'}},
-    proximo:function(){return{luz:'var(--luz-proximo)',img:'<span class="velo" aria-hidden="true">?</span>',txt:
-      '<p class="ceja">Artefacto</p><h3 id="ficha-t">Próximo</h3><p>Hay otro artefacto en camino. Todavía no tiene nombre.</p>'}}
-  };
+  // ── Ficha (vitrinas y puertas) ──
   var ficha=document.getElementById('ficha'),fImg=document.getElementById('ficha-img'),fTxt=document.getElementById('ficha-txt');
-  document.querySelectorAll('button.pieza').forEach(function(b){b.addEventListener('click',function(){
-    var f=FICHAS[b.dataset.a]();fImg.style.setProperty('--luz',f.luz);fImg.innerHTML=f.img;fTxt.innerHTML=f.txt;
+  ficha.addEventListener('close',function(){document.querySelectorAll('.pintado').forEach(function(x){x.classList.remove('pintado')})});
+  function abrirFicha(f,clase){
+    ficha.className='ficha'+(clase?' '+clase:'');fImg.style.setProperty('--luz',f.luz);fImg.innerHTML=f.img;fTxt.innerHTML=f.txt;
     if(ficha.showModal)ficha.showModal();else ficha.setAttribute('open','');
-  })});
+  }
   document.getElementById('cerrar').addEventListener('click',function(){ficha.close()});
   ficha.addEventListener('click',function(e){if(e.target===ficha)ficha.close()});
+  
+  var REDES_DIEM='<nav class="redes-f" aria-label="Redes de Di•eM"><a href="https://open.spotify.com/intl-es/artist/7glwFUToqcYzxmNULOf38D" target="_blank" rel="noopener">Spotify</a><a href="https://www.youtube.com/@di.emoficial" target="_blank" rel="noopener">YouTube</a><a href="https://www.instagram.com/di.emoficial" target="_blank" rel="noopener">Instagram</a><a href="https://www.tiktok.com/@di_em0607" target="_blank" rel="noopener">TikTok</a><a href="https://www.facebook.com/profile.php?id=61589251875874" target="_blank" rel="noopener">Facebook</a></nav>';
+  var FICHAS={
+    grimorio:{luz:'var(--luz-grimorio)',img:'<img src="grimorio.webp" alt="">',txt:
+      '<p class="ceja">Reliquia N.º I · Di•eM</p><h3 id="ficha-t">Demonio de la Tinta</h3>'+
+      '<p>Un grimorio que se escribe con canciones. Cada día 13 se abre un capítulo: la prosa, la canción y su Lado B. Abierto para quien quiera leerlo.</p>'+
+      '<dl class="datos"><dt>Procedencia</dt><dd>Di•eM · Tinta y Ritmo</dd><dt>Desde</dt><dd>2026</dd><dt>Guarda</dt><dd>Prosa, canciones y un Lado B por capítulo</dd><dt>Abre</dt><dd>13 de enero de 2027</dd></dl>'+
+      '<a class="entrar" href="https://demoniodelatinta.com" target="_blank" rel="noopener">Abrir el grimorio <span aria-hidden="true">↗</span></a>'},
+    diem:{luz:'var(--luz-diem)',img:'<img class="diem-img" src="lacre_dm.webp" alt="Sello de lacre DM">',txt:
+      '<p class="ceja">Artista · Tinta y Ritmo</p><h3 id="ficha-t">Di•eM</h3>'+
+      '<p>En 2025 volvió al slam y fundó Tinta y Ritmo para contar sus canciones. Hoy escribe Demonio de la Tinta, un grimorio donde cada capítulo es una canción.</p>'+
+      '<dl class="datos"><dt>Su reliquia</dt><dd><a href="#artefactos" style="color:inherit">Demonio de la Tinta</a></dd></dl>'+REDES_DIEM},
+    garabatos:{luz:'#3f6f8f',img:'<img src="iso_garabatos.webp" alt="Logo de Garabatos Records">',txt:
+      '<p class="ceja">Casa · Audio y producción</p><h3 id="ficha-t">Garabatos Records</h3><p class="lema">Donde la música toma forma</p><p>El estudio de la casa. Aquí la letra pasa de la libreta al micrófono.</p>'},
+    // el logo de 98 Producciones entra en img (y su trazo en TRAZA) cuando llegue
+    p98:{luz:'#8b9098',img:'',txt:
+      '<p class="ceja">Casa aliada · Mezcla</p><h3 id="ficha-t">98 Producciones</h3><p>La casa de Jahyo98. Aquí las canciones del sello encuentran su equilibrio: cada voz, cada beat y cada silencio en su lugar, hasta que suenan como fueron escritas.</p>'},
+    butaca:{luz:'#cfc3a3',img:'<img src="casa_butaca.png" alt="">',txt:
+      '<p class="ceja">Casa · Visual</p><h3 id="ficha-t">Butaca Cero</h3><p class="lema">Más cerca que la primera fila</p><p>La mirada de la casa. Aquí las historias se vuelven imagen.</p>'}
+  };
+  // ── El Tintero: un escenario dibujado en línea; cada programa es un disco colgado en la pared ──
+  var PROGRAMAS={
+    // Slams vuelve cuando se abra una convocatoria: {t:'Slams',d:'Poesía dicha de frente, sin música, en voz alta.',s:[]}
+    canciones:{t:'Canciones',d:'Las canciones de la casa, cada una con su video.',s:[]},
+    sesiones:{t:'Sesiones',d:'Lecturas y canciones en vivo, tal como suenan en El Tintero.',s:[]},
+    artistas:{t:'Tinteros de artistas',d:'Cada artista puede tener su propio Tintero, hecho a la medida de su historia. El del Demonio es el primero.',s:null}
+  };
+  // sesiones: {titulo:'…', fecha:'AAAA-MM-DD', video:'ID de YouTube'}
+  var prog=document.getElementById('programa'),MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  var fono=document.getElementById('fono'),plato=document.getElementById('fono-plato'),puesto=null;
+  function desde(b){ // transform que pone el disco del plato encima del disco de su lugar
+    var r=b.querySelector('.vinilo').getBoundingClientRect(),q=plato.getBoundingClientRect();
+    return 'translate('+((r.left+r.width/2)-(q.left+q.width/2))+'px,'+((r.top+r.height/2)-(q.top+q.height/2))+'px) scale('+(r.width/q.width)+')';
+  }
+  function quitar(){
+    if(!puesto)return;var p=puesto;puesto=null;
+    fono.classList.remove('baja');
+    var ap=p.el.querySelector('.aplasta');p.el.classList.remove('gira');
+    if(reduce){p.el.remove();p.b.classList.remove('fuera');return}
+    var an=p.el.animate([{transform:'none'},{transform:desde(p.b)}],{duration:800,easing:'cubic-bezier(.6,0,.3,1)',fill:'forwards'});
+    an.onfinish=function(){p.b.classList.remove('fuera');p.el.remove()};
+  }
+  function poner(b){
+    if(puesto&&puesto.b===b)return;
+    var habia=!!puesto;quitar();
+    var el=document.createElement('div');el.className='aterriza';el.innerHTML='<div class="aplasta"><div class="vinilo"><span class="etq"></span></div></div>';
+    plato.appendChild(el);puesto={b:b,el:el};var yo=puesto;
+    var ini=desde(b);b.classList.add('fuera');
+    function suena(){if(puesto!==yo)return;fono.classList.add('encendida');setTimeout(function(){if(puesto===yo){fono.classList.add('baja');el.classList.add('gira')}},reduce?0:500)}
+    if(reduce){suena();return}
+    el.style.transform=ini;
+    setTimeout(function(){
+      if(puesto!==yo)return;el.style.transform='';
+      var an=el.animate([{transform:ini},{transform:'translateY(-24px) scale(1.06)',offset:.7},{transform:'none'}],{duration:1000,easing:'cubic-bezier(.5,0,.3,1)'});
+      an.onfinish=suena;
+    },habia?450:0);
+  }
+  function tocar(clave){
+    document.querySelectorAll('.disco-v').forEach(function(x){x.setAttribute('aria-selected',x.dataset.p===clave?'true':'false');if(x.dataset.p===clave)poner(x)});
+    var p=PROGRAMAS[clave],h='<h3>'+p.t+'</h3><p>'+p.d+'</p>';
+    if(p.s===null){
+      h+='<div class="tintero-art"><img src="grimorio.webp" alt=""><div><b>Tintero de Di•eM · Demonio de la Tinta</b><small>Lecturas y sesiones de las canciones del grimorio.</small><a href="https://demoniodelatinta.com" target="_blank" rel="noopener">Entrar ↗</a></div></div>';
+    }else{
+      var hoy=new Date(),ya=p.s.filter(function(x){return new Date(x.fecha+'T00:00:00')<=hoy});
+      h+=ya.length?'<div class="sesiones">'+ya.map(function(x){var f=new Date(x.fecha+'T00:00:00');return '<a class="sesion" href="https://www.youtube.com/watch?v='+x.video+'" target="_blank" rel="noopener"><span class="mini"><img src="https://i.ytimg.com/vi/'+x.video+'/hqdefault.jpg" alt="" loading="lazy"></span><small>'+f.getDate()+' '+MES[f.getMonth()]+' '+f.getFullYear()+'</small><b>'+x.titulo+'</b></a>'}).join('')+'</div>'
+        :'<p class="vacio">Este disco todavía se está grabando.</p>';
+    }
+    prog.innerHTML=h;
+  }
+  document.querySelectorAll('.disco-v').forEach(function(b){b.addEventListener('click',function(){tocar(b.dataset.p)})});
+  var luz=(function(){
+    var cv=document.getElementById('tin-luz'),vid=document.getElementById('tintero-video'),ctx=cv.getContext('2d');
+    var traza=new Image();traza.src='t_escena.webp';var poster=new Image();poster.src='tintero_escena.jpg';
+        var S=0,dentro=false,fijo=false,activo=false,nivel=0;
+    function medir(){var w=Math.round(cv.clientWidth*Math.min(2,devicePixelRatio||1));if(w&&w!==S){S=w;cv.width=cv.height=S}}
+    function caja(){var w=S*640/670;return[(S-w)/2,0,w,S]} // el video es 640x670, centrado en el marco redondo
+    cv.addEventListener('pointerenter',function(){dentro=true});
+    cv.addEventListener('pointerleave',function(){dentro=false});
+    cv.addEventListener('pointerdown',function(e){if(e.pointerType!=='mouse')fijo=!fijo});
+    function cuadro(){
+      if(!activo)return;medir();
+      if(S){
+        nivel+=(((dentro||fijo)?1:0)-nivel)*.06; // la luz sube y baja suave
+        var b=caja();ctx.clearRect(0,0,S,S);ctx.imageSmoothingQuality='high';
+        if(traza.complete)ctx.drawImage(traza,b[0],b[1],b[2],b[3]);
+        var fuente=vid.readyState>=2?vid:(poster.complete?poster:null);
+        if(fuente&&nivel>.005){ctx.globalAlpha=nivel;ctx.drawImage(fuente,b[0],b[1],b[2],b[3]);ctx.globalAlpha=1}
+      }
+      requestAnimationFrame(cuadro);
+    }
+    return{inicio:function(){medir();nivel=0;fijo=false;if(!activo){activo=true;requestAnimationFrame(cuadro)}},alto:function(){activo=false}};
+  })();
+  var tinteroVista=(function(){
+    var NS='http://www.w3.org/2000/svg',lienzo=document.getElementById('lienzo-tin'),muro=document.getElementById('muro-tin');
+    function el(tag,attrs,parent){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e}
+    function linea(d,parent,r,clase){return el('path',{d:d,'class':'l'+(clase?' '+clase:''),pathLength:1,style:'--d:'+r+'s'},parent)}
+    function texto(x,y,cls,r,txt,parent,extra){var t=el('text',{x:x,y:y,'class':cls+' surge',style:'--d:'+r+'s'+(extra||'')},parent);t.textContent=txt;return t}
+    function escena(){
+      var s=el('svg',{viewBox:'0 0 1400 700',role:'group','aria-label':'El escenario de El Tintero'});
+      el('defs',{},s).innerHTML='<linearGradient id="luz-lampara-t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6e7e9" stop-opacity=".14"/><stop offset="1" stop-color="#e6e7e9" stop-opacity="0"/></linearGradient><radialGradient id="luz-disco" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#e6e7e9" stop-opacity=".16"/><stop offset="1" stop-color="#e6e7e9" stop-opacity="0"/></radialGradient>';
+      var g=el('g',{},s);
+      // la sala: pared del fondo, aristas, piso y el borde del escenario
+      linea('M360 60 H1040 V500 H360 Z',g,0);
+      linea('M360 60 L0 -150 M1040 60 L1400 -150 M360 500 L0 640 M1040 500 L1400 640',g,.15,'fina');
+      linea('M0 640 H1400',g,.3);linea('M0 656 H1400',g,.4,'fina');
+      for(var i=1;i<8;i++){var x=360+i*680/8;linea('M'+x+' 500 L'+(700+(x-700)*2.6)+' 640',g,.35+i*.03,'fina')}
+      // el logo de El Tintero al fondo, en su marco redondo (el video va encima, en HTML)
+      el('circle',{cx:700,cy:280,r:180,fill:'#14130f'},g);
+      el('circle',{cx:700,cy:280,r:190,'class':'l marco-t',pathLength:1,style:'--d:.1s'},g);
+      el('circle',{cx:700,cy:280,r:200,'class':'l fina marco-t',pathLength:1,style:'--d:.2s'},g);
+      // el micrófono al frente del escenario
+      var m=el('g',{},g);
+      linea('M700 640 V540 M676 640 L700 616 L724 640',m,1,'fina');
+      linea('M690 540 h20 M700 540 V524',m,1.1,'fina');
+      linea('M688 524 V500 Q688 486 700 486 Q712 486 712 500 V524 Z',m,1.2);
+      linea('M690 500 h20 M690 510 h20',m,1.3,'fina');
+      // primero el logo; de él sale la alfombra de pentagrama hasta el micrófono; luego se dibuja la sala
+      var ESPERA=reduce?0:1.9;
+      g.querySelectorAll('[style*="--d:"]').forEach(function(e){if(e.classList.contains('marco-t'))return;e.setAttribute('style',e.getAttribute('style').replace(/--d:([\d.]+)s/,function(m,n){return '--d:'+(+n+ESPERA).toFixed(2)+'s'}))});
+      var alf=el('g',{'class':'alfombra'},s);
+      var viejo=lienzo.querySelector('svg');if(viejo)viejo.remove();
+      lienzo.insertBefore(s,lienzo.firstChild);
+      setTimeout(function(){alfombraT(alf)},reduce?0:700);
+      muro.classList.remove('vivo');void muro.offsetWidth;muro.classList.add('vivo');muro.scrollLeft=(muro.scrollWidth-muro.clientWidth)/2;
+      prog.innerHTML='<p class="quieto">Aquí la tinta se vuelve voz. Escoge un disco.</p>';document.querySelectorAll('.disco-v').forEach(function(x){x.setAttribute('aria-selected','false');x.classList.remove('fuera')});
+      if(puesto){puesto.el.remove();puesto=null}fono.classList.remove('encendida','baja');
+      luz.inicio();
+    }
+    function alfombraT(alf){
+      var Y0=482,YB=500,Y1=640,MEDIO=46,LINEAS=[-1,-.5,0,.5,1],DUR=reduce?1:1100,t0=null;
+      function esc(y){return y<=YB?1:1+1.6*(y-YB)/140} // la escala del piso: crece hacia el frente
+      var NOTAS=[{y:526,f:.75},{y:552,f:-.75},{y:578,f:.5},{y:604,f:-.5}];
+      var bor=[-1.6,1.6].map(function(){return el('path',{'class':'pauta-alf fina'},alf)});
+      var lin=LINEAS.map(function(){return el('path',{'class':'pauta-alf'},alf)});
+      var fin=el('path',{'class':'pauta-alf doble'},alf);
+      var notas=NOTAS.map(function(n){
+        var k=esc(n.y),x=700+n.f*MEDIO*k,ng=el('g',{'class':'nota-alf'},alf);
+        el('ellipse',{cx:x,cy:n.y,rx:6.5*k,ry:2.6*k,transform:'rotate(-6 '+x+' '+n.y+')'},ng);
+        el('path',{d:'M'+(x+6*k)+' '+n.y+' L'+(x+5.7*k)+' '+(n.y-8*k)},ng);
+        return ng;
+      });
+      var rollo=el('g',{'class':'rollo'},alf),rc=el('path',{},rollo),re1=el('ellipse',{},rollo),re2=el('ellipse',{},rollo);
+      function seg(f,ya,yb){var d='M'+(700+f*MEDIO*esc(ya)).toFixed(1)+' '+ya;if(ya<YB&&yb>YB)d+=' L'+(700+f*MEDIO).toFixed(1)+' '+YB;return d+' L'+(700+f*MEDIO*esc(yb)).toFixed(1)+' '+yb.toFixed(1)}
+      function cuadro(now){
+        if(t0===null)t0=now;var t=Math.min(1,(now-t0)/DUR),e=t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2,yc=Y0+(Y1-Y0)*e,k=esc(yc);
+        LINEAS.forEach(function(f,i){lin[i].setAttribute('d',seg(f,Y0,yc))});
+        [-1.6,1.6].forEach(function(f,i){bor[i].setAttribute('d',seg(f,Y0,yc))});
+        NOTAS.forEach(function(n,i){if(yc>n.y+12)notas[i].classList.add('ya')});
+        // el rollo viene hacia el frente: crece por la perspectiva y se adelgaza al extenderse
+        var r=(9*Math.sqrt(1-e)+1)*k,xl=700-1.6*MEDIO*k,xr=700+1.6*MEDIO*k,rx=Math.max(1,r*.42);
+        rc.setAttribute('d','M'+xl+' '+(yc-2*r)+' H'+xr+' M'+xl+' '+yc+' H'+xr);
+        re1.setAttribute('cx',xl);re1.setAttribute('cy',yc-r);re1.setAttribute('rx',rx);re1.setAttribute('ry',r);
+        re2.setAttribute('cx',xr);re2.setAttribute('cy',yc-r);re2.setAttribute('rx',rx);re2.setAttribute('ry',r);
+        if(t<1)requestAnimationFrame(cuadro);
+        else{rollo.classList.add('fuera');var a=MEDIO*esc(Y1-6);fin.setAttribute('d','M'+(700-a)+' '+(Y1-6)+' H'+(700+a)+' M'+(700-MEDIO*esc(Y1))+' '+Y1+' H'+(700+MEDIO*esc(Y1)))}
+      }
+      requestAnimationFrame(cuadro);
+    }
+    return {inicio:escena};
+  })();
 
-  // ── Contacto: copiar correo y formulario (Formspree) ──
-  var FORMSPREE='mjygqjgr';// código del formulario de Formspree, p. ej. 'xyzabcde'
+  // ── Artefactos: la sala de las reliquias, dibujada con la misma línea del Sello ──
+  var salaVista=(function(){
+    var NS='http://www.w3.org/2000/svg',muro=document.getElementById('muro-art');
+    function el(tag,attrs,parent){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e}
+    function linea(d,parent,r,clase){return el('path',{d:d,'class':'l'+(clase?' '+clase:''),pathLength:1,style:'--d:'+r+'s'},parent)}
+    // perspectiva de un punto: X lateral (-1 a 1), Y vertical (techo -0.75, piso 0.95), z profundidad
+    var VX=700,VY=300,F=700;
+    function P(X,Y,z){return [VX+X*F/z,VY+Y*F/z]}
+    function pts(a){return a.map(function(p){return p[0].toFixed(1)+' '+p[1].toFixed(1)})}
+    function poli(a){return 'M'+pts(a).join(' L')+' Z'}
+    var ZF=2.69,PISO=.8,TECHO=-.62;
+    // siluetas: dibujadas con el piso en y=0 y 100 unidades = medio metro de sala
+    var SIL={
+      capsula:'<path d="M-20 0 V-78 Q-20 -96 0 -96 Q20 -96 20 -78 V0 Z"/><path class="brillo-s" d="M-20 -70 H20 M-20 -22 H20 M-8 -50 h16 v10 h-16 Z"/>',
+      camaleon:'<path d="M-52 -6 L52 -14 L52 -9 L-52 -1 Z"/><ellipse cx="4" cy="-36" rx="26" ry="15"/><path d="M26 -46 L48 -34 L30 -24 Z M20 -48 L32 -62 L36 -42 Z"/><path d="M-6 -24 L-12 -5 M14 -24 L20 -10" stroke-width="6" stroke-linecap="round" fill="none"/><path d="M-20 -36 C-40 -34 -46 -14 -34 -9 C-24 -5 -20 -18 -29 -20" stroke-width="7" stroke-linecap="round" fill="none"/><path class="brillo-s dorado" d="M-20 -48 Q4 -58 26 -46 L48 -34"/>',
+      pregunta:'<text x="0" y="-4" text-anchor="middle" style="font:400 104px var(--display)">?</text>',
+      tela:'<path d="M-30 0 C-29 -30 -26 -62 0 -66 C26 -62 29 -30 30 0 Z"/><path class="brillo-s" d="M-12 -60 C-14 -36 -18 -14 -16 0 M8 -62 C8 -40 12 -18 10 0"/>',
+      telaAlta:'<path d="M-20 0 C-22 -40 -20 -80 -10 -92 Q0 -100 10 -92 C20 -80 22 -40 20 0 Z"/><path class="brillo-s" d="M-4 -90 C-6 -60 -8 -30 -6 0"/>',
+      telaBaja:'<path d="M-34 0 C-34 -16 -30 -36 0 -38 C30 -36 34 -16 34 0 Z"/><path class="brillo-s" d="M-10 -36 C-12 -24 -14 -10 -12 0"/>'
+    };
+    // vitrinas: lado, profundidad cercana y lejana, silueta, luz
+    var VITRINAS=[
+      [-1,2.36,2.52,'telaBaja'],[1,2.36,2.52,'telaAlta'],
+      [-1,1.94,2.12,'pregunta'],[1,1.94,2.12,'tela'],
+      [-1,1.45,1.66,'capsula'],[1,1.45,1.66,'camaleon','dorada']
+    ];
+    var HOJAS=[{f:'2026-11-13',t:'13.11.2026'},{f:'2026-12-13',t:'13.12.2026'}];
+    var ABRE='2027-01-13';
+    function vitrina(g,v,i){
+      var s=v[0],zn=v[1],zf=v[2],Xw=s*1,Xf=s*.76,Yg=-.3,Yp=.24,r=.9+i*.12,c=el('g',{},g);
+      var zm=(zn+zf)/2,um=F/zm,base=P(s*.88,Yp,zm),k=um*.0026;
+      // cara de enfrente (hacia el pasillo) y cara cercana, de cristal
+      el('path',{d:poli([P(Xf,Yg,zn),P(Xf,Yg,zf),P(Xf,Yp,zf),P(Xf,Yp,zn)]),'class':'cristal'},c);
+      el('path',{d:poli([P(Xw,Yg,zn),P(Xf,Yg,zn),P(Xf,Yp,zn),P(Xw,Yp,zn)]),'class':'cristal'},c);
+      el('ellipse',{cx:base[0],cy:base[1]-um*.24,rx:um*.15,ry:um*.24,'class':'contraluz'+(v[4]?' '+v[4]:''),style:'--d:'+(r+1.2)+'s'},c);
+      var idc='vit'+i,cp=el('clipPath',{id:idc},c);
+      el('path',{d:poli([P(Xw,Yg,zn),P(Xf,Yg,zn),P(Xf,Yg,zf),P(Xf,Yp,zf),P(Xf,Yp,zn),P(Xw,Yp,zn)])},cp);
+      var sg=el('g',{'clip-path':'url(#'+idc+')'},c);sg=el('g',{'class':'silueta surge',transform:'translate('+base[0].toFixed(1)+' '+base[1].toFixed(1)+') scale('+k.toFixed(3)+')',style:'--d:'+(r+1.4)+'s'},sg);sg.innerHTML=SIL[v[3]];
+      el('path',{d:poli([P(Xf,Yp,zn),P(Xf,Yp,zf),P(Xf,PISO,zf),P(Xf,PISO,zn)]),'class':'tras'},c);
+      el('path',{d:poli([P(Xw,Yp,zn),P(Xf,Yp,zn),P(Xf,PISO,zn),P(Xw,PISO,zn)]),'class':'tras'},c);
+      linea(poli([P(Xf,Yg,zn),P(Xf,Yg,zf),P(Xf,PISO,zf),P(Xf,PISO,zn)]),c,r);
+      linea(poli([P(Xw,Yg,zn),P(Xf,Yg,zn),P(Xf,PISO,zn),P(Xw,PISO,zn)]),c,r+.1);
+      linea('M'+pts([P(Xf,Yp,zf),P(Xf,Yp,zn),P(Xw,Yp,zn)]).join(' L'),c,r+.2,'fina');
+      linea('M'+pts([P(Xw,Yg,zf),P(Xf,Yg,zf)]).join(' L'),c,r+.25,'fina');
+      // placa sin grabar
+      var pc=s*.88,pw=.06,py=.46;
+      linea(poli([P(pc-pw,py,zn),P(pc+pw,py,zn),P(pc+pw,py+.08,zn),P(pc-pw,py+.08,zn)]),c,r+.5,'fina');
+    }
+    function relicario(g){
+      var z=2.55,u=F/z,cx=VX,w=.54*u,top=VY-.4*u,glassBot=VY+.24*u,floor=VY+PISO*u,pw=.84*u;
+      var x0=cx-w/2,x1=cx+w/2,arc=w/2;
+      var a=el('g',{'class':'relicario-l',tabindex:0,role:'button','aria-label':'Abrir la reliquia N.º I'},g);
+      // la luz de la lámpara sobre el relicario
+      el('path',{d:'M'+(cx-10)+' '+(VY+TECHO*u+26)+' L'+(cx-pw/2-20)+' '+floor+' L'+(cx+pw/2+20)+' '+floor+' L'+(cx+10)+' '+(VY+TECHO*u+26)+' Z','class':'lampara-luz',style:'--d:2.2s'},a);
+      el('path',{d:'M'+x0+' '+glassBot+' V'+(top+arc)+' A'+arc+' '+arc+' 0 0 1 '+x1+' '+(top+arc)+' V'+glassBot+' Z','class':'tras'},a);
+      el('ellipse',{cx:cx,cy:VY-.1*u,rx:w*.42,ry:w*.5,'class':'pulso-rel',style:'--d:2.6s'},a);
+      // terciopelo y grimorio
+      linea('M'+(cx-w*.32)+' '+(glassBot-6)+' Q'+(cx-w*.32)+' '+(glassBot-26)+' '+cx+' '+(glassBot-26)+' Q'+(cx+w*.32)+' '+(glassBot-26)+' '+(cx+w*.32)+' '+(glassBot-6)+' Z',a,2,'fina');
+      var iw=w*.6;
+      el('image',{href:'t_grimorio.webp',x:cx-iw/2,y:glassBot-30-iw*1.03,width:iw,height:iw*1.03,'class':'surge libro-rel',style:'--d:2.4s'},a);
+      el('image',{href:'grimorio.webp',x:cx-iw/2,y:glassBot-30-iw*1.03,width:iw,height:iw*1.03},el('g',{'class':'pinta'},a));
+      // marco y puertas de cristal
+      linea('M'+x0+' '+glassBot+' V'+(top+arc)+' A'+arc+' '+arc+' 0 0 1 '+x1+' '+(top+arc)+' V'+glassBot+' Z',a,1.8);
+      linea('M'+cx+' '+top+' L'+(cx-8)+' '+(top-14)+' L'+cx+' '+(top-28)+' L'+(cx+8)+' '+(top-14)+' Z',a,2.1,'fina');
+      var pi=el('g',{'class':'hoja-rel izq'},a),pd=el('g',{'class':'hoja-rel der'},a);
+      el('path',{d:'M'+(x0+6)+' '+(glassBot-2)+' V'+(top+arc)+' A'+(arc-6)+' '+(arc-6)+' 0 0 1 '+(cx-1)+' '+(top+6)+' V'+(glassBot-2)+' Z','class':'cristal'},pi);
+      linea('M'+(x0+6)+' '+(glassBot-2)+' V'+(top+arc)+' A'+(arc-6)+' '+(arc-6)+' 0 0 1 '+(cx-1)+' '+(top+6)+' V'+(glassBot-2)+' Z',pi,1.9,'fina');
+      el('path',{d:'M'+(x1-6)+' '+(glassBot-2)+' V'+(top+arc)+' A'+(arc-6)+' '+(arc-6)+' 0 0 0 '+(cx+1)+' '+(top+6)+' V'+(glassBot-2)+' Z','class':'cristal'},pd);
+      linea('M'+(x1-6)+' '+(glassBot-2)+' V'+(top+arc)+' A'+(arc-6)+' '+(arc-6)+' 0 0 0 '+(cx+1)+' '+(top+6)+' V'+(glassBot-2)+' Z',pd,1.9,'fina');
+      // pedestal con su placa: N.º I y la cifra
+      el('path',{d:'M'+(cx-pw/2)+' '+glassBot+' H'+(cx+pw/2)+' V'+floor+' H'+(cx-pw/2)+' Z','class':'tras'},a);
+      linea('M'+(cx-pw/2)+' '+floor+' V'+glassBot+' H'+(cx+pw/2)+' V'+floor,a,1.7);
+      linea('M'+(cx-pw/2+10)+' '+(glassBot+10)+' H'+(cx+pw/2-10),a,1.8,'fina');
+      var py=glassBot+(floor-glassBot)*.32,ph=58,pl=pw*.92;
+      linea('M'+(cx-pl/2)+' '+py+' h'+pl+' v'+ph+' h-'+pl+' Z',a,2,'fina');
+      var t1=el('text',{x:cx,y:py+21,'class':'placa-s surge',style:'--d:2.5s'},a);t1.textContent='N.º I';
+      var t2=el('text',{x:cx,y:py+43,'class':'cifra surge',style:'--d:2.7s'},a);t2.setAttributeNS('http://www.w3.org/XML/1998/namespace','xml:space','preserve');t2.textContent='⩗ ∴ ᗰ ◇ N | ◇    ⩗ ∴    |_ △    ⊥ | N ⊥ △';
+      function abre(){
+        if(a.classList.contains('abierto'))return;
+        a.classList.add('abierto');
+        var desde=a.querySelector('.libro-rel').getBoundingClientRect();
+        setTimeout(function(){revelar(desde)},reduce?0:900);
+      }
+      a.addEventListener('click',abre);
+      a.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();abre()}});
+    }
+    // la alfombra: un pentagrama tendido en el piso, del frente hasta el relicario
+    function alfombra(alf,listo){
+      var Z0=1.22,Z1=2.47,ANCHO=.2,LINEAS=[-1,-.5,0,.5,1],DUR=reduce?1:1100,t0=null;
+      // notas acostadas en el pentagrama: f = altura en el pentagrama (−1 a 1), z = dónde caen
+      var NOTAS=[{z:1.6,f:-.75},{z:1.75,f:-.25},{z:1.9,f:.25},{z:2.04,f:0},{z:2.18,f:.5},{z:2.31,f:.75}];
+      var bor=[-1.6,1.6].map(function(){return el('path',{'class':'pauta-alf fina'},alf)});
+      var lin=LINEAS.map(function(){return el('path',{'class':'pauta-alf'},alf)});
+      var fin=el('path',{'class':'pauta-alf doble'},alf);
+      var notas=NOTAS.map(function(n){
+        var X=n.f*ANCHO,u=F/n.z,c=P(X,PISO,n.z),r=.036,ng=el('g',{'class':'nota-alf'},alf);
+        el('ellipse',{cx:c[0],cy:c[1],rx:r*u,ry:r*PISO*F/(n.z*n.z),transform:'rotate(-8 '+c[0]+' '+c[1]+')'},ng);
+        el('path',{d:'M'+pts([P(X+r*.92,PISO,n.z),P(X+r*.92,PISO,n.z+.16)]).join(' L')},ng);
+        return ng;
+      });
+      var rollo=el('g',{'class':'rollo'},alf),rc=el('path',{},rollo),re1=el('ellipse',{},rollo),re2=el('ellipse',{},rollo),esp=el('path',{},rollo);
+      function seg(X,za,zb){return 'M'+pts([P(X,PISO,za),P(X,PISO,zb)]).join(' L')}
+      function cuadro(now){
+        if(t0===null)t0=now;var t=Math.min(1,(now-t0)/DUR),e=t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2,zc=Z0+(Z1-Z0)*e;
+        LINEAS.forEach(function(f,i){lin[i].setAttribute('d',seg(f*ANCHO,Z0,zc))});
+        [-1.6,1.6].forEach(function(f,i){bor[i].setAttribute('d',seg(f*ANCHO,Z0,zc))});
+        NOTAS.forEach(function(n,i){if(zc>n.z+.18)notas[i].classList.add('ya')});
+        // el rollo: un cilindro acostado que se adelgaza conforme se extiende
+        var r=.075*Math.sqrt(1-e)+.004,u=F/zc,xl=P(-ANCHO*1.6,PISO,zc)[0],xr=P(ANCHO*1.6,PISO,zc)[0],yb=VY+PISO*u,yt=yb-2*r*u,ry=r*u,rx=Math.max(1,ry*.42);
+        rc.setAttribute('d','M'+xl+' '+yt+' H'+xr+' M'+xl+' '+yb+' H'+xr);
+        re1.setAttribute('cx',xl);re1.setAttribute('cy',yb-ry);re1.setAttribute('rx',rx);re1.setAttribute('ry',ry);
+        re2.setAttribute('cx',xr);re2.setAttribute('cy',yb-ry);re2.setAttribute('rx',rx);re2.setAttribute('ry',ry);
+        esp.setAttribute('d','M'+xr+' '+(yb-ry)+' m'+(-rx*.5)+' 0 a'+(rx*.5)+' '+(ry*.5)+' 0 1 1 '+(rx*.5)+' '+(ry*.5));
+        if(t<1)requestAnimationFrame(cuadro);
+        else{rollo.classList.add('fuera');fin.setAttribute('d','M'+pts([P(-ANCHO,PISO,Z1-.04),P(ANCHO,PISO,Z1-.04)]).join(' L')+' M'+pts([P(-ANCHO,PISO,Z1),P(ANCHO,PISO,Z1)]).join(' L'));listo()}
+      }
+      requestAnimationFrame(cuadro);
+    }
+    function sala(){
+      var s=el('svg',{viewBox:'0 0 1400 700',role:'group','aria-label':'La sala de las reliquias'});
+      el('defs',{},s).innerHTML='<linearGradient id="luz-lampara" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6e7e9" stop-opacity=".16"/><stop offset="1" stop-color="#e6e7e9" stop-opacity="0"/></linearGradient><radialGradient id="contraluz" cx=".5" cy=".55" r=".5"><stop offset="0" stop-color="#c9cdd3" stop-opacity=".2"/><stop offset="1" stop-color="#c9cdd3" stop-opacity="0"/></radialGradient><radialGradient id="contraluz-oro" cx=".5" cy=".55" r=".5"><stop offset="0" stop-color="#d9b46a" stop-opacity=".26"/><stop offset="1" stop-color="#d9b46a" stop-opacity="0"/></radialGradient><radialGradient id="pulso" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#a3222d" stop-opacity=".38"/><stop offset="1" stop-color="#a3222d" stop-opacity="0"/></radialGradient>';
+      var g=el('g',{},s);
+      // pared del fondo, aristas del pasillo, piso y techo
+      var A=P(-1,TECHO,ZF),B=P(1,TECHO,ZF),C=P(1,PISO,ZF),D=P(-1,PISO,ZF);
+      linea(poli([A,B,C,D]),g,0);
+      [[-1,TECHO],[1,TECHO],[1,PISO],[-1,PISO]].forEach(function(q,i){linea('M'+pts([P(q[0],q[1],ZF),P(q[0],q[1],1.2)]).join(' L'),g,.1+i*.05)});
+      [-.5,.5].forEach(function(X,i){linea('M'+pts([P(X,PISO,ZF),P(X,PISO,1.2)]).join(' L'),g,.3+i*.05,'fina')});
+      [1.5,1.9,2.3].forEach(function(z,i){linea('M'+pts([P(-1,PISO,z),P(1,PISO,z)]).join(' L'),g,.4+i*.06,'fina');linea('M'+pts([P(-1,TECHO,z),P(1,TECHO,z)]).join(' L'),g,.45+i*.06,'fina')});
+      VITRINAS.forEach(function(v,i){vitrina(g,v,i)});
+      relicario(g);
+      // primero se desenrolla la alfombra de pentagrama; la sala se dibuja después
+      g.classList.add('espera');
+      var alf=el('g',{'class':'alfombra'},s);s.insertBefore(alf,g);
+      muro.classList.remove('vivo');muro.innerHTML='';muro.appendChild(s);muro.scrollLeft=(muro.scrollWidth-muro.clientWidth)/2;
+      alfombra(alf,function(){g.classList.remove('espera');void muro.offsetWidth;muro.classList.add('vivo')});
+    }
+    // al abrir: sale solo el grimorio; hasta el 13 de enero lo acompañan las dos hojas selladas
+    var rev=document.getElementById('revelacion'),libro=document.getElementById('rev-libro'),frs=document.getElementById('fragmentos');
+    function revelar(desde){
+      var hoy=new Date().toISOString().slice(0,10);
+      frs.innerHTML=hoy>=ABRE?'':HOJAS.map(function(h,i){
+        return '<li class="frag" style="--x:'+(i?'86%':'14%')+';--y:'+(i?'60%':'40%')+';--r:'+(i?'4deg':'-5deg')+';--d:'+(1.2+i*.3)+'s"><span class="hoja-sellada"><img src="hoja.webp" alt="Una hoja sellada"><small>'+h.t+'</small></span></li>';
+      }).join('');
+      rev.classList.remove('vivo');libro.classList.remove('gira');
+      if(rev.showModal)rev.showModal();else rev.setAttribute('open','');
+      var a=libro.getBoundingClientRect(),s=desde.width/a.width;
+      var dx=(desde.left+desde.width/2)-(a.left+a.width/2),dy=(desde.top+desde.height/2)-(a.top+a.height/2);
+      var an=libro.animate([{transform:'translate('+dx+'px,'+dy+'px) scale('+s+') perspective(900px) rotateY(0deg)',opacity:.4},{transform:'translate(0,-20px) scale(1.04) perspective(900px) rotateY(360deg)',opacity:1,offset:.8},{transform:'none',opacity:1}],{duration:reduce?1:1500,easing:'cubic-bezier(.45,0,.2,1)'});
+      an.onfinish=function(){libro.classList.add('gira')};
+      rev.classList.add('vivo');
+    }
+    document.getElementById('cerrar-rev').addEventListener('click',function(){rev.close()});
+    rev.addEventListener('close',function(){rev.classList.remove('vivo');libro.classList.remove('gira');var r=muro.querySelector('.relicario-l');if(r)r.classList.remove('abierto')});
+    return {inicio:sala};
+  })();
+
+  // ── El Sello: el vestíbulo con tres puertas; cada una lleva a la oficina de su área ──
+  var selloVista=(function(){
+    var NS='http://www.w3.org/2000/svg',muro=document.getElementById('muro-sello'),pista=document.getElementById('pista-muro'),volver=document.getElementById('volver-v');
+    function el(tag,attrs,parent){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e}
+    function linea(d,parent,r,clase){return el('path',{d:d,'class':'l'+(clase?' '+clase:''),pathLength:1,style:'--d:'+r+'s'},parent)}
+    function texto(x,y,cls,r,txt,parent,extra){var t=el('text',{x:x,y:y,'class':cls+' surge',style:'--d:'+r+'s'+(extra||'')},parent);t.textContent=txt;return t}
+    function lienzo(etiqueta){
+      var s=el('svg',{viewBox:'0 0 1400 700',role:'group','aria-label':etiqueta});
+      el('defs',{},s).innerHTML='<linearGradient id="luz-rendija" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f5f6" stop-opacity=".55"/><stop offset="1" stop-color="#f4f5f6" stop-opacity="0"/></linearGradient><radialGradient id="luz-dentro" cx=".5" cy=".7" r=".8"><stop offset="0" stop-color="#cfd3d8" stop-opacity=".35"/><stop offset="1" stop-color="#0b0c0e" stop-opacity="1"/></radialGradient><linearGradient id="luz-lampara" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6e7e9" stop-opacity=".16"/><stop offset="1" stop-color="#e6e7e9" stop-opacity="0"/></linearGradient>';
+      return s;
+    }
+    function mostrar(s,extra){
+      muro.classList.remove('vivo');muro.innerHTML='';
+      if(extra){ // lo que va en HTML sobre el dibujo, en las mismas coordenadas del viewBox
+        var esc=document.createElement('div');esc.className='escena-sello';esc.appendChild(s);
+        var capa=document.createElement('div');capa.className='capa-plana';capa.appendChild(extra);esc.appendChild(capa);muro.appendChild(esc);
+        escalar();
+      }else muro.appendChild(s);
+      void muro.offsetWidth;muro.classList.add('vivo');muro.scrollLeft=(muro.scrollWidth-muro.clientWidth)/2;
+    }
+    function escalar(){var c=muro.querySelector('.capa-plana'),sv=muro.querySelector('svg');if(c&&sv)c.style.transform='scale('+(sv.getBoundingClientRect().width/1400)+')'}
+    addEventListener('resize',escalar);
+    function lampara(x,top,bottom,r,ancho,g){
+      el('path',{d:'M'+(x-8)+' '+(top+50)+' L'+(x-ancho)+' '+bottom+' L'+(x+ancho)+' '+bottom+' L'+(x+8)+' '+(top+50)+' Z','class':'lampara-luz',style:'--d:'+(r+.8)+'s'},g);
+      linea('M'+x+' '+top+' V'+(top+26),g,r,'fina');
+      linea('M'+(x-16)+' '+(top+50)+' Q'+x+' '+(top+16)+' '+(x+16)+' '+(top+50)+' Z',g,r+.1);
+    }
+    function boton(a,fn,etiqueta){
+      a.setAttribute('tabindex',0);a.setAttribute('role','button');a.setAttribute('aria-label',etiqueta);
+      a.addEventListener('click',fn);
+      a.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();fn()}});
+    }
+    // casa: la casa oficial, al centro de la pared de en medio; aliados: colaboradores, a su lado
+    // c: palabra corta para la hoja en la pared; t, d, f: lo que se lee al abrir la pizarra
+    var PIZARRA={
+      artistas:[
+        {c:'Analepsis',t:'Analepsis, el video',d:'Di•eM · Demonio de la Tinta, la primera hoja sellada del grimorio.',f:'13 nov 2026'},
+        {c:'Preludio',t:'Preludio',d:'Di•eM · Demonio de la Tinta, la segunda hoja sellada.',f:'13 dic 2026'},
+        {c:'Grimorio',t:'Abre el grimorio',d:'Di•eM · Demonio de la Tinta: un capítulo cada día 13.',f:'13 ene 2027'}
+      ],
+      audio:[
+        {c:'00',t:'«00», canción del capítulo VI',d:'Garabatos Records · Demonio de la Tinta.',f:'En estudio'},
+        {c:'Tintero',t:'El Tintero',d:'Garabatos Records · lecturas y sesiones de las canciones del grimorio.',f:'En construcción'}
+      ],
+      visual:[
+        {c:'Previa',t:'La previa del grimorio',d:'Butaca Cero · clips de los siete días antes de que se abra.',f:'Ene 2027'},
+        {c:'Corto',t:'Cortometraje del grimorio',d:'Butaca Cero · el primer cortometraje del sello.',f:'En guion'}
+      ]
+    };
+    var TRAZA={'lacre_dm.webp':'t_lacre.webp','iso_garabatos.webp':'t_garabatos.webp','iso_butaca.svg':'t_butaca.png'};
+    var AREAS={
+      artistas:{t:'Artistas',casa:{k:'diem',n:'Di•eM',img:'lacre_dm.webp'},aliados:[]},
+      audio:{t:'Audio',casa:{k:'garabatos',n:'Garabatos Records',img:'iso_garabatos.webp'},aliados:[{k:'p98',n:'98 Producciones',s:'Mezcla'}]},
+      visual:{t:'Visual',casa:{k:'butaca',n:'Butaca Cero',img:'iso_butaca.svg'},aliados:[]}
+    };
+    function vestibulo(){
+      var s=lienzo('El vestíbulo del sello'),g=el('g',{},s);
+      linea('M0 20 H1400',g,0,'fina');linea('M0 36 H1400',g,.1,'fina');
+      linea('M0 620 H1400',g,.15);linea('M0 636 H1400',g,.25,'fina');
+      for(var i=0;i<=10;i++){if(i===5)continue;var x=i*140;linea('M'+x+' 636 L'+(700+(x-700)*1.5)+' 700',g,.3+i*.03,'fina')}
+      // el logo del sello colgado al centro
+      linea('M700 36 L668 64 M700 36 L732 64',g,.6,'fina');
+      linea('M616 64 H784 V222 H616 Z',g,.7);linea('M628 76 H772 V210 H628 Z',g,.8,'fina');
+      var ls=el('g',{'class':'logo-sello'},g);
+      el('rect',{x:616,y:64,width:168,height:158,fill:'transparent'},ls);
+      el('image',{href:'t_logo.webp',x:634,y:80,width:132,height:126,'class':'surge',style:'--d:1.3s',preserveAspectRatio:'xMidYMid meet'},ls);
+      el('image',{href:'logo.webp',x:634,y:80,width:132,height:126,preserveAspectRatio:'xMidYMid meet'},el('g',{'class':'pinta'},ls));
+      // el logo del sello lleva a quiénes somos
+      boton(ls,function(){document.getElementById('nosotros').scrollIntoView({behavior:reduce?'auto':'smooth'})},'Acerca de Tinta y Ritmo');
+      texto(700,262,'placa-t',1.6,'Tinta y Ritmo',g,';font-size:30px');
+      lampara(515,300,620,.4,40,g);lampara(885,300,620,.5,40,g);
+      function puerta(x,clave,r){
+        var A=AREAS[clave],w=144,h=236,top=620-h,left=x-w/2;
+        var a=el('g',{'class':'puerta'},g);
+        el('rect',{x:left,y:top,width:w,height:h,'class':'tras'},a);
+        el('rect',{x:left+4,y:616,width:w-8,height:24,'class':'rendija'},a);
+        linea('M'+(left-14)+' 620 V'+(top-14)+' H'+(left+w+14)+' V620',a,r,'marco');
+        var hoja=el('g',{'class':'hoja'},a);
+        el('rect',{x:left,y:top,width:w,height:h,fill:'#08090b'},hoja);
+        linea('M'+left+' 620 V'+top+' H'+(left+w)+' V620',hoja,r+.2);
+        linea('M'+(left+20)+' '+(top+22)+' h'+(w-40)+' v84 h-'+(w-40)+' Z',hoja,r+.4,'fina');
+        linea('M'+(left+20)+' '+(top+126)+' h'+(w-40)+' v90 h-'+(w-40)+' Z',hoja,r+.5,'fina');
+        el('circle',{cx:left+w-22,cy:top+132,r:5,'class':'l',pathLength:1,style:'--d:'+(r+.7)+'s'},hoja);
+        texto(x,top-50,'placa-t',r+.9,A.t,a);
+        texto(x,top-27,'placa-s',r+1,[A.casa.n].concat(A.aliados.map(function(c){return c.n})).join(' · '),a,';font-size:9.5px');
+        boton(a,function(){
+          a.classList.add('abre');
+          setTimeout(function(){
+            var sv=muro.querySelector('svg');sv.style.transformOrigin=(x/14)+'% 70%';
+            var an=sv.animate([{transform:'scale(1)',opacity:1},{transform:'scale(2.4)',opacity:0}],{duration:reduce?1:650,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+            an.onfinish=function(){oficina(clave)};
+          },550);
+        },'Entrar a '+A.t);
+      }
+      puerta(330,'artistas',.5);puerta(700,'audio',.68);puerta(1070,'visual',.86);
+      pista.textContent='Toca una puerta para entrar a cada área';volver.hidden=true;
+      mostrar(s);
+    }
+    // la pizarra de la pared derecha: lo que cada área tiene en la mesa
+    function pizarra(clave,g){
+      var hojas=PIZARRA[clave],k=225/370,VX=700,VY=335;
+      function P(x,v){return[x,VY+v*k*(x-VX)]} // v: altura en la pared (−1 techo … +1 piso)
+      var x1=1135,x2=1330,vt=-.62,vb=.42;
+      // la pizarra es plana (HTML) y se pega a la pared con una transformación de perspectiva exacta
+      var W=420,H=300,q=[P(x1,vt),P(x2,vt),P(x2,vb),P(x1,vb)];
+      var a=document.createElement('div');a.className='pizarra-plana';
+      a.innerHTML='<p class="pz-t">En la mesa</p><div class="pz-hojas">'+hojas.map(function(h,i){
+        return '<div class="pz-hoja" style="--i:'+i+'"><i></i><span>'+h.f+'</span><b>'+h.c+'</b><u></u><u></u><u></u></div>'}).join('')+'</div>';
+      a.style.width=W+'px';a.style.height=H+'px';a.style.transform=homografia(W,H,q);
+      a.setAttribute('tabindex',0);a.setAttribute('role','button');a.setAttribute('aria-label','Ver lo que '+AREAS[clave].t+' tiene en la mesa');
+      function abre(){
+        a.classList.add('pintado');
+        var h='<p class="ceja">'+AREAS[clave].t+' · En la mesa</p><h3 id="ficha-t">Lo que viene</h3><ul class="pizarra-lista">'+
+          hojas.map(function(x){return '<li><b>'+x.t+'</b><span>'+x.d+'</span><i>'+x.f+'</i></li>'}).join('')+'</ul>';
+        setTimeout(function(){abrirFicha({luz:'var(--luz-proximo)',img:'',txt:h},'solo-txt')},reduce?0:300);
+      }
+      a.addEventListener('click',abre);a.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();abre()}});
+      return a;
+    }
+    // matrix3d que lleva un rectángulo de W×H a las cuatro esquinas q (sup-izq, sup-der, inf-der, inf-izq)
+    function homografia(W,H,q){
+      var x0=q[0][0],y0=q[0][1],x1=q[1][0],y1=q[1][1],x2=q[2][0],y2=q[2][1],x3=q[3][0],y3=q[3][1];
+      var dx1=x1-x2,dx2=x3-x2,dx3=x0-x1+x2-x3,dy1=y1-y2,dy2=y3-y2,dy3=y0-y1+y2-y3,den=dx1*dy2-dx2*dy1;
+      var gg=(dx3*dy2-dx2*dy3)/den,hh=(dx1*dy3-dx3*dy1)/den;
+      var A=x1-x0+gg*x1,B=x3-x0+hh*x3,C=x0,D=y1-y0+gg*y1,E=y3-y0+hh*y3,F=y0;
+      return 'matrix3d('+[A/W,D/W,0,gg/W,B/H,E/H,0,hh/H,0,0,1,0,C,F,0,1].join(',')+')';
+    }
+    function oficina(clave){
+      var A=AREAS[clave],s=lienzo('Oficina de '+A.t),g=el('g',{},s);
+      // la oficina en perspectiva desde el punto (700,335): pared del fondo, piso y techo
+      var VX=700,VY=335;
+      function hh(x){return 225*Math.abs(x-VX)/370}
+      linea('M330 110 H1070 V560 H330 Z',g,0);
+      linea('M330 110 L0 -90 M1070 110 L1400 -90 M330 560 L0 760 M1070 560 L1400 760',g,.15,'fina');
+      for(var i=1;i<6;i++){var xx=330+i*740/6;linea('M'+xx+' 560 L'+(700+(xx-700)*2.6)+' 760',g,.25+i*.03,'fina')}
+      texto(700,72,'placa-t',.6,A.t,g,';font-size:34px');
+      // la puerta de regreso, en la pared izquierda
+      var v=el('g',{'class':'puerta regreso'},g),x1=110,x2=230,b1=VY+hh(x1),b2=VY+hh(x2),t1=b1-1.4*hh(x1),t2=b2-1.4*hh(x2);
+      el('path',{d:'M'+x1+' '+b1+' V'+t1+' L'+x2+' '+t2+' V'+b2+' Z','class':'tras'},v);
+      linea('M'+x1+' '+b1+' V'+t1+' L'+x2+' '+t2+' V'+b2,v,.3);
+      el('circle',{cx:x2-14,cy:VY+40,r:4,'class':'l',pathLength:1,style:'--d:.6s'},v);
+      texto((x1+x2)/2,t1-14,'placa-s',.8,'Vestíbulo',v);
+      boton(v,vestibulo,'Regresar al vestíbulo');
+      // todos los cuadros del mismo tamaño: la casa de Tinta y Ritmo al centro y más arriba; los aliados a su lado
+      function cuadro(c,cx,top,lado,r,oficial){
+        lampara(cx,top-58,top+lado,r,56,g);
+        var a=el('g',{'class':'cuadro'+(c.k?'':' vacio')+(oficial?' oficial':'')},g),left=cx-lado/2;
+        el('rect',{x:left,y:top,width:lado,height:lado,fill:'#08090b'},a);
+        linea('M'+left+' '+top+' h'+lado+' v'+lado+' h-'+lado+' Z',a,r+.2);
+        linea('M'+(left+10)+' '+(top+10)+' h'+(lado-20)+' v'+(lado-20)+' h-'+(lado-20)+' Z',a,r+.3,'fina');
+        var m=20;
+        if(c.img){
+          el('image',{href:TRAZA[c.img],x:left+m,y:top+m,width:lado-2*m,height:lado-2*m,preserveAspectRatio:'xMidYMid meet','class':'surge',style:'--d:'+(r+.9)+'s'},a);
+          el('image',{href:c.img,x:left+m,y:top+m,width:lado-2*m,height:lado-2*m,preserveAspectRatio:'xMidYMid meet'},el('g',{'class':'pinta'},a));
+        }
+        if(c.n)texto(cx,top+lado+38,'placa-t',r+1,c.n,a,';font-size:19px');
+        if(c.s)texto(cx,top+lado+(c.n?60:38),'placa-s',r+1.1,c.s,a);
+        if(c.k)boton(a,function(){a.classList.add('pintado');setTimeout(function(){abrirFicha(FICHAS[c.k])},reduce?0:650)},'Conocer '+c.n);
+      }
+      cuadro(A.casa,700,200,150,.9,true);
+      var aliados=A.aliados.length?A.aliados:(clave==='visual'?[{k:null,n:'',s:'Próximamente'}]:[]);
+      aliados.forEach(function(c,i){cuadro(c,i?470:930,262,150,1.3+i*.2,false)});
+      var pz=pizarra(clave,g);
+      pista.textContent='Toca un cuadro o la pizarra';volver.hidden=false;
+      mostrar(s,pz);
+          }
+    volver.addEventListener('click',vestibulo);
+    return {inicio:vestibulo};
+  })();
+
+  // ── Contacto: la carta ──
+  var PRUEBA=false;
+  var FORMSPREE='mjygqjgr';
   document.getElementById('copiar').addEventListener('click',function(){
     var b=this,t=document.getElementById('correo-sello').textContent;
     function hecho(){b.textContent='Copiado';setTimeout(function(){b.textContent='Copiar'},1800)}
-    if(navigator.clipboard)navigator.clipboard.writeText(t).then(hecho,function(){var r=document.createRange();r.selectNodeContents(document.getElementById('correo-sello'));getSelection().removeAllRanges();getSelection().addRange(r)});
+    var sel=function(){var r=document.createRange();r.selectNodeContents(document.getElementById('correo-sello'));getSelection().removeAllRanges();getSelection().addRange(r)};
+    if(navigator.clipboard)navigator.clipboard.writeText(t).then(hecho,sel);else sel();
   });
-  var forma=document.getElementById('forma'),aviso=document.getElementById('aviso'),enviar=document.getElementById('enviar');
+  var forma=document.getElementById('forma'),aviso=document.getElementById('aviso'),enviar=document.getElementById('enviar'),sobre=document.getElementById('sobre'),llego=document.getElementById('llego');
+  function sellar(){
+    if(reduce){forma.hidden=true;llego.hidden=false;return}
+    forma.animate([{transform:'scaleY(1)',opacity:1},{transform:'scaleY(.34)',opacity:1,offset:.55},{transform:'scaleY(.34) translateY(40px)',opacity:0}],{duration:900,easing:'ease-in',fill:'forwards'});
+    setTimeout(function(){
+      forma.hidden=true;sobre.hidden=false;
+      sobre.querySelector('.sobre').animate([{transform:'scale(.7)',opacity:0},{transform:'scale(1)',opacity:1}],{duration:500,easing:'ease-out',fill:'forwards'});
+      sobre.querySelector('.lacre').animate([{transform:'translateY(-70px) scale(1.5)',opacity:0},{transform:'translateY(0) scale(1)',opacity:1,offset:.7},{transform:'scale(.92)',opacity:1},{transform:'scale(1)',opacity:1}],{duration:800,delay:450,easing:'cubic-bezier(.5,0,.3,1)',fill:'forwards'});
+      setTimeout(function(){
+        sobre.animate([{transform:'translateY(0) rotate(0)',opacity:1},{transform:'translateY(-48vh) rotate(-8deg)',opacity:0}],{duration:1000,easing:'cubic-bezier(.6,0,.4,1)',fill:'forwards'});
+        setTimeout(function(){sobre.hidden=true;llego.hidden=false;llego.animate([{opacity:0},{opacity:1}],{duration:700,fill:'forwards'})},950);
+      },1700);
+    },880);
+  }
   forma.addEventListener('submit',function(e){
-    e.preventDefault();aviso.className='aviso';
+    e.preventDefault();aviso.textContent='';
     var n=forma.nombre.value.trim(),c=forma.email.value.trim(),m=forma.mensaje.value.trim();
-    if(!n||!c||!m){aviso.textContent='Escribe tu nombre, tu correo y el mensaje.';return}
-    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(c)){aviso.textContent='Revisa tu correo: parece que le falta algo.';return}
-    if(!FORMSPREE){aviso.textContent='El formulario todavía no está conectado. Mientras, escríbenos a tintayritmo.oficial@gmail.com.';return}
-    enviar.disabled=true;enviar.textContent='Enviando…';
+    if(!m){aviso.textContent='La carta está vacía: escribe tu mensaje.';return}
+    if(!n){aviso.textContent='Falta tu firma.';return}
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(c)){aviso.textContent='Revisa tu correo para poder responderte.';return}
+    if(PRUEBA){sellar();return}
+    enviar.disabled=true;enviar.textContent='Sellando…';
     fetch('https://formspree.io/f/'+FORMSPREE,{method:'POST',body:new FormData(forma),headers:{Accept:'application/json'}})
-      .then(function(r){if(!r.ok)throw 0;forma.reset();aviso.className='aviso ok';aviso.textContent='Recibido. Te respondemos a tu correo.'})
+      .then(function(r){if(!r.ok)throw 0;sellar()})
       .catch(function(){aviso.textContent='No se pudo enviar. Inténtalo otra vez o escríbenos a tintayritmo.oficial@gmail.com.'})
-      .then(function(){enviar.disabled=false;enviar.textContent='Enviar'});
+      .then(function(){enviar.disabled=false;enviar.textContent='Sellar y enviar'});
+  });
+  document.getElementById('otra').addEventListener('click',function(){
+    forma.reset();forma.getAnimations().forEach(function(a){a.cancel()});sobre.getAnimations().forEach(function(a){a.cancel()});
+    llego.hidden=true;forma.hidden=false;forma.querySelector('textarea').focus();
   });
 
-  // ── El Tintero: sesiones (agregar aquí cada sesión publicada en YouTube) ──
-  // {tipo:'Cypher'|'Slam'|'Live', titulo:'…', fecha:'AAAA-MM-DD', video:'ID de YouTube'}
-  var SESIONES=[];
-  (function(){
-    var c=document.getElementById('sesiones'),hoy=new Date(),MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-    var ya=SESIONES.filter(function(x){return new Date(x.fecha+'T00:00:00')<=hoy}).sort(function(a,b){return a.fecha<b.fecha?1:-1});
-    if(!ya.length){c.innerHTML='<div class="quieta"><p class="ceja">La tinta está quieta</p><b>Todavía no hay sesiones.</b><p>La primera se anuncia aquí y en el canal de YouTube del sello.</p></div>';return}
-    c.innerHTML='<div class="sesiones">'+ya.map(function(x){var f=new Date(x.fecha+'T00:00:00');return '<a class="sesion" href="https://www.youtube.com/watch?v='+x.video+'" target="_blank" rel="noopener"><span class="mini"><img src="https://i.ytimg.com/vi/'+x.video+'/hqdefault.jpg" alt="" loading="lazy"></span><small>'+x.tipo+' · '+f.getDate()+' '+MES[f.getMonth()]+' '+f.getFullYear()+'</small><b>'+x.titulo+'</b></a>'}).join('')+'</div>';
-  })();
-
-  // ── Lanzamientos: cada entrada se muestra sola desde su fecha; antes, solo la siguiente aparece como "Próximo" sin nombre ni fecha ──
-  var LANZAMIENTOS=[
-    {fecha:'2026-11-13',titulo:'Analepsis',obra:'Demonio de la Tinta',tipo:'Canción · Hoja suelta',ligas:[['Ver en YouTube','https://www.youtube.com/watch?v=I1chlI3x3NQ'],['Leer la hoja','https://demoniodelatinta.com']]},
-    {fecha:'2026-12-13',titulo:'Preludio',obra:'Demonio de la Tinta',tipo:'Canción · Hoja suelta',ligas:[['Leer la hoja','https://demoniodelatinta.com']]},
-    {fecha:'2027-01-13',titulo:'00',obra:'Demonio de la Tinta',tipo:'Capítulo · Se abre el grimorio',ligas:[['Abrir el grimorio','https://demoniodelatinta.com']]},
-    {fecha:'2027-01-20',titulo:'Apertura del grimorio',obra:'El Tintero',tipo:'Lectura',ligas:[['Escuchar','https://demoniodelatinta.com']]},
-    {fecha:'2027-02-13',titulo:'Odisea en tu Sonrisa',obra:'Demonio de la Tinta',tipo:'Capítulo',ligas:[['Leer','https://demoniodelatinta.com']]},
-    {fecha:'2027-03-13',titulo:'Monotonía',obra:'Demonio de la Tinta',tipo:'Capítulo',ligas:[['Leer','https://demoniodelatinta.com']]}
-  ];
-  (function(){
-    var c=document.getElementById('surco'),hoy=new Date(),MES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-    var orden=LANZAMIENTOS.slice().sort(function(a,b){return a.fecha<b.fecha?-1:1});
-    var salidos=orden.filter(function(x){return new Date(x.fecha+'T00:00:00')<=hoy}).reverse();
-    var hayProx=orden.some(function(x){return new Date(x.fecha+'T00:00:00')>hoy});
-    var h=hayProx?'<div class="pista prox"><time>Próximo</time><b>Algo se está escribiendo.</b></div>':'';
-    salidos.forEach(function(x){var f=new Date(x.fecha+'T00:00:00');
-      h+='<article class="pista"><time datetime="'+x.fecha+'">'+f.getDate()+' de '+MES[f.getMonth()]+' de '+f.getFullYear()+'</time><b>'+x.titulo+'</b><small>'+x.obra+' · '+x.tipo+'</small>'+
-        (x.ligas&&x.ligas.length?'<span class="ligas">'+x.ligas.map(function(l){return '<a href="'+l[1]+'" target="_blank" rel="noopener">'+l[0]+' ↗</a>'}).join('')+'</span>':'')+'</article>'});
-    if(!salidos.length)h+='<div class="pista"><time>Lado A</time><p>Aquí quedará grabado el primer lanzamiento del sello.</p></div>';
-    c.innerHTML=h;
-  })();
+  ir();
 })();
 </script>
-</body>
-</html>
+<script>
+(function(){
+  var l=document.getElementById('letrero'),base=l.textContent;
+  document.querySelectorAll('.nota').forEach(function(a){
+    function di(){l.textContent=a.dataset.dice}
+    function calla(){l.textContent=base}
+    a.addEventListener('mouseenter',di);a.addEventListener('focus',di);
+    a.addEventListener('mouseleave',calla);a.addEventListener('blur',calla);
+  });
+})();
+</script>
