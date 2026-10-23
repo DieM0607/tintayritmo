@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>La casa del sello</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -57,6 +62,11 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
 .secciones::-webkit-scrollbar{display:none}
 .secciones a{text-decoration:none;font:500 13.5px/1 var(--body);color:var(--tinta-suave);padding:12px 11px;white-space:nowrap}
 .secciones a:hover{color:var(--tinta)}
+.menu-btn{display:none;margin-left:auto;width:44px;height:44px;place-content:center;gap:6px;background:none;border:0;padding:0;cursor:pointer}
+.menu-btn span{display:block;width:24px;height:1.5px;background:var(--plata-1);border-radius:1px;transition:transform .35s ease,opacity .25s ease}
+.barra.abierta .menu-btn span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+.barra.abierta .menu-btn span:nth-child(2){opacity:0}
+.barra.abierta .menu-btn span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
 
 /* ── Inicio: la clave sobre el pentagrama ── */
 .inicio{min-height:calc(100vh - 64px);display:grid;align-items:center;padding-block:40px 80px}
@@ -276,8 +286,11 @@ body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(-
 .pie small{font:500 10.5px/1.6 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--plata-3)}
 .pre .pie{display:none}
 @media (max-width:760px){
-  .barra .wrap{flex-wrap:wrap;gap:0 12px;padding-top:8px}
-  .secciones{margin-left:-11px;width:calc(100% + 22px)}
+  .menu-btn{display:grid}
+  .secciones{position:absolute;left:0;right:0;top:100%;flex-direction:column;gap:0;margin:0;padding:6px 16px 18px;background:color-mix(in srgb,var(--papel) 96%,transparent);border-bottom:1px solid #15171b;backdrop-filter:blur(8px);clip-path:inset(0 0 100% 0);visibility:hidden;transition:clip-path .45s cubic-bezier(.5,0,.2,1),visibility 0s .45s}
+  .barra.abierta .secciones{clip-path:inset(0 0 0 0);visibility:visible;transition:clip-path .45s cubic-bezier(.5,0,.2,1)}
+  .secciones a{font:400 24px/1 var(--display);padding:16px 0;border-bottom:1px solid #15171b}
+  .secciones a:last-child{border-bottom:0}
   .gotas-vivas{display:none}
   .lineas{left:-16px}
 }
@@ -676,7 +689,8 @@ a.hoja-f:hover{filter:brightness(1.08)}
   <header class="barra">
     <div class="wrap">
       <a class="marca" href="#inicio"><img src="logo.webp" alt="">Tinta y Ritmo</a>
-      <nav class="secciones" aria-label="Secciones">
+      <button class="menu-btn" type="button" id="menu-btn" aria-label="Abrir el menú" aria-expanded="false" aria-controls="secciones"><span></span><span></span><span></span></button>
+      <nav class="secciones" id="secciones" aria-label="Secciones">
         <a href="#artefactos" data-v="artefactos">Artefactos</a>
         <a href="#tintero" data-v="tintero">El Tintero</a>
         <a href="#sello" data-v="sello">El Sello</a>
@@ -967,6 +981,11 @@ a.hoja-f:hover{filter:brightness(1.08)}
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   // ── Secciones ──
   var vistas={inicio:document.getElementById('v-inicio'),artefactos:document.getElementById('v-artefactos'),tintero:document.getElementById('v-tintero'),sello:document.getElementById('v-sello'),contacto:document.getElementById('v-contacto')};
+  var barra=document.querySelector('.barra'),menuBtn=document.getElementById('menu-btn');
+  function menu(abre){barra.classList.toggle('abierta',abre);menuBtn.setAttribute('aria-expanded',abre?'true':'false');menuBtn.setAttribute('aria-label',abre?'Cerrar el menú':'Abrir el menú')}
+  menuBtn.addEventListener('click',function(){menu(!barra.classList.contains('abierta'))});
+  document.querySelectorAll('.secciones a,.marca').forEach(function(a){a.addEventListener('click',function(){menu(false)})});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')menu(false)});
   function ir(){
     var v=(location.hash||'#inicio').slice(1);if(!vistas[v])v='inicio';
     for(var k in vistas)vistas[k].hidden=(k!==v);
@@ -1403,8 +1422,9 @@ a.hoja-f:hover{filter:brightness(1.08)}
         },'Entrar a '+A.t);
       }
       puerta(330,'artistas',.5);puerta(700,'audio',.68);puerta(1070,'visual',.86);
-      pista.textContent='Toca una puerta para entrar a cada área';volver.hidden=true;
+      volver.hidden=true;
       mostrar(s);
+      pista.textContent=muro.scrollWidth>muro.clientWidth+4?'Desliza para ver las tres puertas':'Toca una puerta para entrar a cada área';
     }
     // la pizarra de la pared derecha: lo que cada área tiene en la mesa
     function pizarra(clave,g){
