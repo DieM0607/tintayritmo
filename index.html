@@ -603,6 +603,23 @@ a.hoja-f:hover{filter:brightness(1.08)}
 .puerta.abre .tras{fill:url(#luz-dentro)}
 .puerta.cerrada{cursor:default}
 .puerta.cerrada .placa-s{fill:#4a4e55}
+/* versión pública: tres secciones, sin El Tintero y sin oficinas; con la clave se abre todo */
+html:not(.abierto) .secciones a[data-v="tintero"],html:not(.abierto) .nota[href="#tintero"],html:not(.abierto) #v-sello .pista-muro{display:none}
+html:not(.abierto) .solo4 .notas{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr))}
+html:not(.abierto) .solo4 .nota{transform:none}
+html:not(.abierto) .solo4 .nota[href="#artefactos"]{grid-area:1/1}
+html:not(.abierto) .solo4 .nota[href="#sello"]{grid-area:2/2}
+html:not(.abierto) .solo4 .nota[href="#contacto"]{grid-area:3/3}
+.puerta.cerrada .rendija{display:none}
+.gota-toque{fill:transparent;cursor:pointer;pointer-events:all}
+.abierto .clave .gota{fill:var(--plata-1);filter:drop-shadow(0 0 4px rgba(244,245,246,.6))}
+.llave{width:min(300px,calc(100% - 32px));padding:22px;border:1.5px solid var(--plata-2);outline:1px solid #3a3e45;outline-offset:-10px;background:var(--papel);color:var(--tinta)}
+.llave::backdrop{background:rgba(2,2,3,.82);backdrop-filter:blur(4px)}
+.llave input{width:100%;background:transparent;border:0;border-bottom:1px solid #3a3e45;color:var(--plata-1);font:500 15px/2.2 var(--mono);letter-spacing:.2em;text-align:center;outline:none}
+.llave input::placeholder{color:#4f545b;text-transform:uppercase;font-size:11px}
+.llave input:focus{border-color:var(--plata-2)}
+.llave.mal{animation:no .4s}
+@keyframes no{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 .lampara-luz{fill:url(#luz-lampara);opacity:0;transition:opacity 1.4s ease var(--d,0s)}
 .vivo .lampara-luz{opacity:1}
 .pista-muro{margin:6px 0 30px;text-align:center;font:500 10.5px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:#5d626a}
@@ -730,6 +747,7 @@ a.hoja-f:hover{filter:brightness(1.08)}
           </g>
           <path class="trazo dibuja" style="--len:30;--d:1.1s" d="M57 236 C 52 246, 38 246, 34 236" stroke-width="3"/>
           <path class="gota aparece" style="--d:1.35s" d="M33 222 C 33 222, 27 231, 27 235 a6 6 0 0 0 12 0 C 39 231, 33 222, 33 222Z"/>
+          <circle class="gota-toque" id="gota" cx="33" cy="234" r="18"/>
         </svg>
         <div class="renglon">
           <div class="lineas" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
@@ -870,6 +888,9 @@ a.hoja-f:hover{filter:brightness(1.08)}
       <div class="ficha-txt" id="ficha-txt"></div>
     </div>
   </dialog>
+  <dialog class="llave" id="llave" aria-label="Clave">
+    <form method="dialog" id="llave-forma"><input type="password" id="llave-in" placeholder="Clave" autocomplete="off" aria-label="Clave"></form>
+  </dialog>
   <dialog class="revelacion" id="revelacion" aria-label="Reliquia N.º I">
     <button class="cerrar" type="button" id="cerrar-rev">Cerrar</button>
     <div class="rev-in solo">
@@ -979,6 +1000,8 @@ a.hoja-f:hover{filter:brightness(1.08)}
 <script>
 (function(){
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  try{if(localStorage.getItem('tyr-llave')==='2920cbb9bf0a4d6061114b497e28732dde6d0b35e7082d9bf37bcd924ed2491a')document.documentElement.classList.add('abierto')}catch(e){}
+  function abierto(){return document.documentElement.classList.contains('abierto')}
   // ── Secciones ──
   var vistas={inicio:document.getElementById('v-inicio'),artefactos:document.getElementById('v-artefactos'),tintero:document.getElementById('v-tintero'),sello:document.getElementById('v-sello'),contacto:document.getElementById('v-contacto')};
   var barra=document.querySelector('.barra'),menuBtn=document.getElementById('menu-btn');
@@ -987,7 +1010,7 @@ a.hoja-f:hover{filter:brightness(1.08)}
   document.querySelectorAll('.secciones a,.marca').forEach(function(a){a.addEventListener('click',function(){menu(false)})});
   document.addEventListener('keydown',function(e){if(e.key==='Escape')menu(false)});
   function ir(){
-    var v=(location.hash||'#inicio').slice(1);if(!vistas[v])v='inicio';
+    var v=(location.hash||'#inicio').slice(1);if(!vistas[v]||(v==='tintero'&&!abierto()))v='inicio';
     for(var k in vistas)vistas[k].hidden=(k!==v);
     document.querySelectorAll('.secciones a').forEach(function(a){if(a.dataset.v===v)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
     if(v!=='inicio'){var e=document.getElementById('entrada');if(e){e.remove();var p=document.getElementById('pagina');p.classList.remove('pre');document.body.classList.add('listo')}}
@@ -1412,6 +1435,7 @@ a.hoja-f:hover{filter:brightness(1.08)}
         el('circle',{cx:left+w-22,cy:top+132,r:5,'class':'l',pathLength:1,style:'--d:'+(r+.7)+'s'},hoja);
         texto(x,top-50,'placa-t',r+.9,A.t,a);
         texto(x,top-27,'placa-s',r+1,[A.casa.n].concat(A.aliados.map(function(c){return c.n})).join(' · '),a,';font-size:9.5px');
+        if(!abierto()){a.classList.add('cerrada');return}
         boton(a,function(){
           a.classList.add('abre');
           setTimeout(function(){
@@ -1550,6 +1574,28 @@ a.hoja-f:hover{filter:brightness(1.08)}
     function calla(){l.textContent=base}
     a.addEventListener('mouseenter',di);a.addEventListener('focus',di);
     a.addEventListener('mouseleave',calla);a.addEventListener('blur',calla);
+  });
+})();
+</script>
+<script>
+// la clave vive en la gota de la clave de sol: abre el sitio completo; tocarla otra vez lo cierra
+(function(){
+  var H='2920cbb9bf0a4d6061114b497e28732dde6d0b35e7082d9bf37bcd924ed2491a',gota=document.getElementById('gota'),llave=document.getElementById('llave'),forma=document.getElementById('llave-forma'),campo=document.getElementById('llave-in'),raiz=document.documentElement;
+  function refresca(){dispatchEvent(new HashChangeEvent('hashchange'))}
+  gota.addEventListener('click',function(e){
+    e.stopPropagation();
+    if(raiz.classList.contains('abierto')){raiz.classList.remove('abierto');try{localStorage.removeItem('tyr-llave')}catch(x){}refresca();return}
+    campo.value='';if(llave.showModal)llave.showModal();else llave.setAttribute('open','');campo.focus();
+  });
+  llave.addEventListener('click',function(e){if(e.target===llave)llave.close()});
+  forma.addEventListener('submit',function(e){
+    e.preventDefault();
+    var t=campo.value.trim().toLowerCase();
+    crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)).then(function(b){
+      var h=[].map.call(new Uint8Array(b),function(x){return('0'+x.toString(16)).slice(-2)}).join('');
+      if(h===H){raiz.classList.add('abierto');try{localStorage.setItem('tyr-llave',H)}catch(x){}llave.close();refresca()}
+      else{llave.classList.remove('mal');void llave.offsetWidth;llave.classList.add('mal');campo.value=''}
+    });
   });
 })();
 </script>
